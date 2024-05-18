@@ -1,0 +1,65 @@
+<!Doctype html>
+<html lang='en'>
+    <head>
+        <title>Maud Sulter - An Act of Digital Devotion</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script type="importmap">
+            {
+              "imports": {
+                "three": "./node_modules/three/build/three.module.js",
+                "three/addons/": "./node_modules/three/examples/jsm/",
+                "gsap": "./node_modules/gsap/index.js"
+              }
+            }
+            </script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+        <script type="module" src="./scripts/egg_navigation.mjs"></script>
+       
+      </head>
+      <body>
+        <canvas id='home_page_canvas'></canvas>
+        <h1 id="loading_title">Loading...</h1>
+        <h1 class="direction_title" id="direction_title_West">Direction West</h1>
+        <h1 class="direction_title" id="direction_title_South">Direction South</h1>
+        <h1 class="direction_title" id="direction_title_East">Direction East</h1>
+        <h1 class="direction_title" id="direction_title_North">Direction North</h1>
+        <div id="footer">
+            <p id="footer_bold">Maud Sulter - An Act of Digital Devotion</p><p id="footer_regular"> by Evan Ifekoya</p>
+        </div>
+        <div class="about-button-container" id="about-button-container">
+          <button class="home-button" id="home-about-open">about</button>
+        </div>
+        <div class="about-modal" id="about-modal">
+          <div class="about-container">
+            
+            <p>
+              You are invited to immerse yourself in an interactive website, guided on an intimate journey with material related to Maud Sulter. Material is sourced in public collections and websites, interwoven with individual experience and reflections on the impact of her work to younger generation artists. Take the opportunity to adjust your audio experience to suit how you want to interact with the material. </br></br>
+
+Where possible, Maud is presented in her own words. This project exists to shine a new light on the practice of groundbreaking Artist Maud Sulter who sadly passed away in 2008 but leaves a prolific body of work and impact. This act of <span class="italic">Digital Devotion</span> considers the role of sound in creating intimate archives, sacred containers and space for contemplation. </br> </br>
+              </p>
+              <p class="bold-text">
+Ancestor as Muse </br>
+Maud Sulter </br>
+An Act of Digital Devotion, 2024 </br>
+</p>
+            </p>
+            <p></br>credits</p>
+            <p>
+              Artist Research project by Evan Ifekoya </br>
+Guided journey narrated by Evan Ifekoya with additional reading by Sekai Machache (tbc) </br>
+Web design and development Guy Ronen </br>
+Production assistance Carlotta Roma </br>
+Sound mix and master by Simone Carty ( tbc) </br>
+            </p>
+            <p></br>Made with support from:
+            </p>
+            <img class='img-logo' src="./images/logos/TANC AHRC logo.jpg" width=20% alt="TANC AHRC logo">
+            <img class='img-logo' src="./images/logos/UAL Logo Black.jpg" width="20%" alt="UAL logo">
+            <button class="home-button" id="home-close-button">x</button>
+          </div>
+        </div>
+      </body>
+</html>
