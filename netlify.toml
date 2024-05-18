@@ -1,0 +1,6 @@
+[[redirects]]
+from = "three"
+to = "../node_modules/three/build/three.module.js"
+
+[build]
+publish = "public"
