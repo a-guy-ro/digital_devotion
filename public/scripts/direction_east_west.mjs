@@ -5,6 +5,7 @@ import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js'
 import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 import { Reflector } from 'three/addons/objects/Reflector.js';
 import { gsap } from "gsap";
+import { MeshToonMaterial } from 'three';
 
 
 
@@ -71,6 +72,11 @@ dracpGtlfLoader.setDRACOLoader(dracoLoader);
 gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
   gtlfLoader.load('./models/eggshells_dense.glb', (gtlf_2) => {
     gtlfLoader.load('./models/eggshells_dense.glb', (smallpowder) => {
+      gtlfLoader.load('./models/eggshells_dense.glb', (powder_1) => {
+        gtlfLoader.load('./models/eggshells_dense.glb', (powder_2) => {
+          gtlfLoader.load('./models/eggshells_dense.glb', (powder_3) => {
+            gtlfLoader.load('./models/eggshells_dense.glb', (powder_4) => {
+              // gtlfLoader.load('./models/eggshells_dense.glb', (powder_5) => {
   gtlfLoader.load('./models/disc_2.glb', (disc) => { 
     gtlfLoader.load('./models/mirror_2.glb', (mirror) => { 
       gtlfLoader.load('./models/fools_gold_2_deci.glb', (fools_gold)=> {
@@ -90,7 +96,10 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
   loading_modal.style.display = 'none';
   eggshells = gltf.scene;
   eggpowder = gtlf_2.scene;
-  eggpowdersmall = smallpowder.scene;
+  // eggpowdersmall = smallpowder.scene;
+
+  const powders = [smallpowder.scene, powder_1.scene, powder_2.scene, powder_3.scene, powder_4.scene];
+
   eggshells.children[0].children.forEach(mesh=> {
     mesh.material.transparent = true;
     mesh.material.opacity = 0;
@@ -102,21 +111,57 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
       mesh.material.opacity = 0;
     }
   })
-  eggpowdersmall.children[0].children.forEach(mesh=>{
-    if (mesh.isMesh) {
-      mesh.material.transparent = true;
+  powders.forEach((powder,ndx)=> {
+    powder.children[0].children.forEach((mesh)=> {
+      if (mesh.isMesh) {
+        mesh.material.transparent = true;
       mesh.material.opacity = 0;
-      mesh.geometry.scale(0.65,0.65,0.65);
-      // console.log(mesh.material);
+      if (ndx ===0) {
+        mesh.geometry.scale(0.65,0.65,0.65);
+        // powder.rotateY(Math.PI*0.45);  
+      }  else {
+        mesh.geometry.scale(0.85,0.85,0.85);
+      }
+      }
+      
+    })
+    if (ndx ===0) {
+      // mesh.geometry.scale(0.65,0.65,0.65);
+      powder.rotateY(Math.PI*0.45);  
+      powder.position.set(-4,20,-2);
+    } else if (ndx ===1) {
+      powder.rotateY(Math.PI*0.25);
+      powder.position.set(-12,18,10);
+    } else if (ndx === 2) {
+      powder.rotateY(Math.PI*0.65);
+      powder.position.set(10,13,7);
+    } else if (ndx === 3) {
+      powder.rotateY(Math.PI*0.55);
+      powder.position.set(-7,6,-7);
+    } else if (ndx === 4) {
+      powder.rotateY(Math.PI*0.65);
+      powder.position.set(10,5,-5);
+    } else if (ndx === 5) {
+      powder.rotateY(Math.PI*0.15);
+      powder.position.set(-15,15,10);
     }
   })
-  eggpowdersmall.rotateY(Math.PI*0.45);
+  // eggpowdersmall.children[0].children.forEach(mesh=>{
+  //   if (mesh.isMesh) {
+  //     mesh.material.transparent = true;
+  //     mesh.material.opacity = 0;
+  //     mesh.geometry.scale(0.65,0.65,0.65);
+  //     // console.log(mesh.material);
+  //   }
+  // })
+  // eggpowdersmall.rotateY(Math.PI*0.45);
 
   eggshells.castShadow = true;
-  eggshells.position.set(0,0,-2);
+  eggshells.position.set(0,-3,-2);
   eggpowder.castShadow = true;
-  eggpowder.position.set(0,0,-2);
-  eggpowdersmall.position.set(-2,5,-2);
+  eggpowder.position.set(3,-3,-2);
+  eggpowder.rotateY(Math.PI*-0.5);
+  // eggpowdersmall.position.set(-2,5,-2);
 
 {
   const discObject = {
@@ -129,7 +174,8 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     sound_title: 'letter_part_7',
     rotateZ: Math.PI,
     img: 'no',
-    elementalMenu: '00:00'
+    elementalMenu: '00:00',
+    scale:1.5
   }
   console.log(discObject);
   objects.push(discObject);
@@ -143,7 +189,8 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     sound_title: 'letter_part_6',
     rotateZ: 0,
     img: 'no',
-    elementalMenu: '00:00'
+    elementalMenu: '00:00',
+    scale:2.5
   }
   foolsGoldObject.object.rotateX(Math.PI*0.5)
   objects.push(foolsGoldObject);
@@ -157,10 +204,11 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     sound_title: 'letter_part_3',
     rotateZ: 0,
     img: {index: 2, timecode: '00:46', hasAppeared: false},
-    elementalMenu: '00:00'
+    elementalMenu: '00:00',
+    scale:1.5
   }
   {
-  rightMirror = new Reflector(new THREE.CircleGeometry(0.78,32*4), {
+  rightMirror = new Reflector(new THREE.CircleGeometry(0.78*mirrorObject.scale,32*4), {
     color: new THREE.Color(0x131313),
     textureWidth: window.innerWidth * window.devicePixelRatio * 0.15,
     textureHeight: window.innerHeight * window.devicePixelRatio * 0.15,
@@ -168,25 +216,27 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
   rightMirror.position.copy(mirrorObject.locVec);
   rightMirror.position.x +=0.05;
   rightMirror.position.y +=0.635;
-  rightMirror.position.z +=0.89;
+  rightMirror.position.z +=1.38;
   rightMirror.rotateZ(mirrorObject.rotateZ);
   rightMirror.rotateY(-Math.PI*0.02)
   rightMirror.rotateX(Math.PI);
   rightMirror.visible = false;
+  // rightMirror.geometry.scale(mirrorObject.scale,mirrorObject.scale);
   scene.add(rightMirror);
-  leftMirror = new Reflector(new THREE.CircleGeometry(0.78,32*4), {
+  leftMirror = new Reflector(new THREE.CircleGeometry(0.78*mirrorObject.scale,32*4), {
     color: new THREE.Color(0x131313),
     textureWidth: window.innerWidth * window.devicePixelRatio * 0.15,
     textureHeight: window.innerHeight * window.devicePixelRatio * 0.15,
   })
   leftMirror.position.copy(mirrorObject.locVec);
-  leftMirror.position.x +=1.09;
+  leftMirror.position.x +=1.53;
   leftMirror.position.y +=0.7;
   leftMirror.position.z -= 0.05;
   leftMirror.rotateZ(mirrorObject.rotateZ);
   leftMirror.rotateY(Math.PI*0.5)
   leftMirror.rotateX(Math.PI);
   leftMirror.visible = false;
+  // leftMirror.geometry.scale(mirrorObject.scale,mirrorObject.scale);
   scene.add(leftMirror);
 }
   objects.push(mirrorObject);
@@ -195,14 +245,15 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
 const flowersObject = {
   name: 'flowers',
   object: flowers.scene,
-  locVec: new THREE.Vector3(5,27,6),
+  locVec: new THREE.Vector3(1,27,6),
   sound: 1,
   elemental: badagry,
   posAudio: '',
   sound_title: 'letter_part_1',
   rotateZ: 0,
   img: 'no',
-  elementalMenu: 'no'
+  elementalMenu: 'no',
+  scale:1
 }
 
 flowersObject.object.rotateX(Math.PI*0.75);
@@ -219,7 +270,8 @@ const scarabObject = {
   sound_title: 'letter_part_5',
   rotateZ: Math.PI,
   img: {index: 4, timecode: '00:00', hasAppeared: false},
-  elementalMenu: '00:00'
+  elementalMenu: '00:00',
+  scale: 2.2
 }
 scarabObject.object.rotateX(-Math.PI*0.15);
 scarabObject.object.children[0].material.color = new THREE.Color(0xc0c0c0);
@@ -234,7 +286,8 @@ const drumObject = {
   sound_title: 'letter_part_2',
   rotateZ: 0,
   img: {index: 1, timecode: '00:00', hasAppeared: false},
-  elementalMenu: '00:58'
+  elementalMenu: '00:58',
+  scale: 3
 }
 drumObject.object.rotateX(Math.PI*0.25);
 
@@ -249,7 +302,8 @@ const staffObject = {
   sound_title: 'letter_part_4',
   rotateZ: Math.PI,
   img: {index: 3, timecode: '00:00', hasAppeared: false},
-  elementalMenu: '00:00'
+  elementalMenu: '00:00',
+  scale: 2.5
   // -Math.PI*0.35
 }
 staffObject.object.rotateX(-Math.PI*0.65);
@@ -261,28 +315,23 @@ objects.forEach (object=> {
     // if (object.object.children.length === 1) {
     object.object.children[0].children.forEach(mesh=>{
       if (mesh.isMesh) {
+        
         // mesh.material.transparent = true;
         // mesh.material.opacity = 0;
+        mesh.geometry.scale(object.scale,object.scale,object.scale);
         if (object.name !== 'fools_gold') {
           // console.log(mesh);
           mesh.material.metalness = 0;
-          if (object.name === 'staff') {
-            mesh.geometry.scale(2,2,2);
-            // console.log(mesh);
-          } else if (object.name === 'flowers') {
-            mesh.geometry.scale(0.75,0.75,0.75);
-          } else if (object.name === 'scarab') { 
+         if (object.name === 'scarab') { 
             mesh.material.color.set(0xF7F2EE);
-            mesh.geometry.scale(2,2,2);
+            // mes//h.geometry.scale(2,2,2);
             console.log(mesh);
             // mesh.material.metalness = 0.75;
-          } else if (object.name === 'drum') {
-            mesh.geometry.scale(2.5,2.5,2.5);
-          }
+          } 
           
         } else {
           mesh.material.metalness = 1;
-          mesh.geometry.scale(2,2,2);
+          // mesh.geometry.scale(2,2,2);
         } 
         
       }
@@ -292,16 +341,17 @@ objects.forEach (object=> {
       if (mesh.isMesh) {
         // mesh.material.transparent = true;
         // mesh.material.opacity = 0;
+        mesh.geometry.scale(object.scale,object.scale,object.scale);
         if (object.name === 'scarab') { 
           mesh.material.color.set(0xF7F2EE);
           mesh.material.metalness = 0.67;
-          mesh.geometry.scale(1.5,1.5,1.5);
+          // mesh.geometry.scale(1.5,1.5,1.5);
         } else if (object.name !== 'fools_gold') {
           mesh.material.metalness = 0;
         }  else {
           mesh.material.metalness = 0.75;
           mesh.material.color.set(0xE6D063)
-          mesh.geometry.scale(2,2,2);
+          // mesh.geometry.scale(2,2,2);
         } 
       }
     })
@@ -362,10 +412,12 @@ scene.add(gradientCapsuleElement);
 }
 scene.add(eggshells);
 scene.add(eggpowder);
-scene.add(eggpowdersmall);
-camera.position.set(0,-10.25,0);
-
+powders.forEach(powder=>scene.add(powder));
+// scene.add(eggpowdersmall);
+const cameraStartVector = new THREE.Vector3(0,-12.25,0);
+camera.position.copy(cameraStartVector);
 camera.lookAt(eggshells.position.x,eggshells.position.y+5,eggshells.position.z);
+camera.updateProjectionMatrix();
 const gsapTL = gsap.timeline();
 gsapTL.add(opacityAnimation(gradientCapsuleElement,2,1.0),0.1);
 eggshells.children[0].children.forEach(mesh=> {
@@ -381,19 +433,22 @@ eggpowder.children[0].children.forEach(mesh=> {
     // render();
   }),"<")
 })
-eggpowdersmall.children[0].children.forEach(mesh=> {
-  gsapTL.add(opacityAnimation(mesh,1,0.95,()=>{
-    eggpowdersmall.children.forEach(mesh=>{
-      if (mesh.isMesh) {
-      mesh.material.opacity = 0.95;
-      }});
-      // let index = 0;
-      setTimeout (()=>objectVisible(objects[0],0),750);
-      
-    controls.enabled = true;
-    render();
-  }),"<")
+powders.forEach(powder=> {
+  powder.children[0].children.forEach(mesh=> {
+    gsapTL.add(opacityAnimation(mesh,1,0.95,()=>{
+      powder.children.forEach(mesh=>{
+        if (mesh.isMesh) {
+        mesh.material.opacity = 0.95;
+        }});
+        // let index = 0;
+        setTimeout (()=>objectVisible(objects[0],0),750);
+        
+      controls.enabled = true;
+      render();
+    }),"<")
+  })
 })
+
 
 gsapTL.resume();
 audioPlayerInit();
@@ -430,6 +485,14 @@ window.addEventListener('click', ()=> {
     )
   }
 });
+
+const resetViewBtn = document.querySelector('.reset-view-button');
+resetViewBtn.addEventListener('click', ()=> {
+  camera.position.copy(cameraStartVector);
+  camera.lookAt(eggshells.position.x,eggshells.position.y+5,eggshells.position.z);
+  camera.updateProjectionMatrix();
+});
+
 requestAnimationFrame(animate);
 })
 })
@@ -447,6 +510,11 @@ requestAnimationFrame(animate);
 })
 })
 })
+})
+})
+})
+})
+// })
 });
 // console.log(skybox.material.opacity);
 
@@ -836,14 +904,16 @@ const letter_num = 7;
 // let track; 
 // Player controls and attributes 
 const playButton = document.querySelector(".player-play-btn")
-const playIcon = playButton.querySelector(".player-icon-play")
-const pauseIcon = playButton.querySelector(".player-icon-pause")
-const progress = document.querySelector(".player-progress")
-const progressFilled = document.querySelector(".player-progress-filled")
+const nextButton = document.querySelector('.player-next-btn');
+const backButton = document.querySelector('.player-back-btn');
+const playIcon = playButton.querySelector(".player-icon-play");
+const pauseIcon = playButton.querySelector(".player-icon-pause");
+const progress = document.querySelector(".player-progress");
+const progressFilled = document.querySelector(".player-progress-filled");
 progressFilled.style.cursor = 'grab';
-const playerCurrentTime = document.querySelector(".player-time-current")
-const playerDuration = document.querySelector(".player-time-duration")
-const volumeControl = document.querySelector(".player-volume")
+const playerCurrentTime = document.querySelector(".player-time-current");
+const playerDuration = document.querySelector(".player-time-duration");
+const volumeControl = document.querySelector(".player-volume");
 volumeControl.style.cursor = 'grab';
 const imgs = document.querySelectorAll('.letters_images_container');
 const soundsMenu = document.querySelector('.adding-sounds-container');
@@ -928,6 +998,7 @@ for (let i=0;i<elementalItems.length;i++) {
     if (typeof nowPlaying !== 'undefined') {
     if (audios[nowPlaying.sound-1].ctx.state === "suspended") {
       audios[nowPlaying.sound-1].ctx.resume()
+      stopElemental();
     }
     // Play or pause track depending on state 
     if (playButton.dataset.playing === "false") {
@@ -937,6 +1008,7 @@ for (let i=0;i<elementalItems.length;i++) {
         //  
       // }
       // track = audioCtx.createMediaElementSource(audios[nowPlaying.sound-1]);
+      stopElemental();
       audios[nowPlaying.sound-1].audio.play();
       
       console.log('playing ' + audios[nowPlaying.sound-1].audio.src);
@@ -962,6 +1034,7 @@ for (let i=0;i<elementalItems.length;i++) {
       // }
     } else if (playButton.dataset.playing === "true") {
       audios[nowPlaying.sound-1].audio.pause();
+      playElemental();
       elementalItems.forEach(item=>item.children[0].children[0].pause());
       playButton.dataset.playing = "false";
       pauseIcon.classList.add("hidden");
@@ -975,6 +1048,22 @@ for (let i=0;i<elementalItems.length;i++) {
       
     }
   }
+  })
+
+  nextButton.addEventListener("click", ()=> {
+    audios[nowPlaying.sound-1].audio.currentTime = audios[nowPlaying.sound-1].audio.duration-0.1;
+    // progressUpdate();
+    audios[nowPlaying.sound-1].audio.pause();
+    onEndedHandler();
+  });
+
+  backButton.addEventListener("click",()=>{
+    if (audios[nowPlaying.sound-1].audio.currentTime > 0) {
+      audios[nowPlaying.sound-1].audio.currentTime = 0;
+      progressUpdate();
+    }
+    
+
   })
   // if the track ends, reset the player 
   
@@ -1043,6 +1132,10 @@ for (let i=0;i<elementalItems.length;i++) {
       soundsMenu.classList.add('letters_images_container_show');
       soundsMenu.classList.remove('letters_images_container_hide');
     }
+
+    if (nowPlaying.img === 'no' && nowPlaying.elementalMenu !== '00:00') {
+      playElemental();
+    }
     
     // audios[nowPlaying.sound-1].audio.duration = audios[nowPlaying.sound-1].audio.duration;
     if (lettersQueue.length > 0) {
@@ -1091,5 +1184,52 @@ for (let i=0;i<elementalItems.length;i++) {
   progress.addEventListener("mousedown", () => (mousedown = true))
   progress.addEventListener("mouseup", () => (mousedown = false))
 // })
+function stopElemental () {
+  objects.forEach(obj=>
+    {
+      if (typeof obj.posAudio !== 'string') {
+        // if (!obj.posAudio.isPlaying) {
+        fadeVol(obj.posAudioVol*volumeControl.value,0,0.01,obj.posAudio);
+        // obj.posAudio.stop();
+        
+      // }
+    }
+  }
+  )
+}
+function playElemental () {
+  objects.forEach(obj=>
+    {
+      if (typeof obj.posAudio !== 'string') {
+        // if (!obj.posAudio.isPlaying) {
+        obj.posAudio.setLoop(true);
+        obj.posAudio.play();
+        fadeVol(0,obj.posAudioVol*volumeControl.value,0.01,obj.posAudio);
+      // }
+    }
+  }
+  )
+}
+
+function fadeVol (vol, end, interval, soundElement) {
+  // if (end > vol) {}
+  if (Math.abs(end-vol) > interval) {
+    if (end > vol) {
+      vol += interval;
+    } else {
+      vol -= interval;
+    }
+      soundElement.setVolume(vol);
+      // console.log(soundElement.getVolume());
+      setTimeout(()=>fadeVol (vol,end,interval, soundElement),1);
+
+  } else {
+      soundElement.setVolume(end);
+      if (end === 0) {
+        soundElement.stop();
+      }
+  }
+
+}
 }
 

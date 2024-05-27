@@ -26,14 +26,14 @@ const json = [
     },
     {
         "link": "https://www.vam.ac.uk/articles/zabat-photographs-by-maud-sulter",
-        "image": "Polyhymnia Primordial Egg from Evan Ifekoya.jpg",
-        "title": "See the full series of ‘Zabat’ photographs here:"
+        "image": "",
+        "title": "See the full series of ‘Zabat’ photographs here"
     },
-    {
-        "link": "https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-8365.12583",
-        "image": "Mauld Sulter Estate Instagram.jpg",
-        "title": "Read ‘Call and Response’ by Maud Sulter via Wiley online library here"
-    },
+    // {
+    //     "link": "https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-8365.12583",
+    //     "image": "Mauld Sulter Estate Instagram.jpg",
+    //     "title": "Read ‘Call and Response’ by Maud Sulter via Wiley online library here"
+    // },
     {
         "link": "https://autograph.org.uk/blog/texts/art-of-devotion-belief-faith-and-spirit-in-creative-practice/",
         "image": "Art of Devotion Autograph ABP.jpg",
@@ -76,12 +76,12 @@ const json = [
     },
     {
         "link": "https://www.impressions-gallery.com/wp-content/uploads/2019/09/Exhibition-Guide_Final_lores.pdf ",
-        "image": "Maud Instagram Profile.jpg",
+        "image": "",
         "title": "Impression Gallery Exhibition guide"
     },
     {
         "link": "https://www.hasta-standrews.com/features/2022/2/13/rendering-the-invisible-visible-maud-sulters-zabat",
-        "image": "Maud portrait ArtUK.png",
+        "image": "Maud Sulter’s Zabat by Beth James.jpg",
         "title": "‘Rendering the Invisible Visible: Maud Sulter’s Zabat’ By Beth James"
     },
     {
@@ -91,7 +91,7 @@ const json = [
     },
     {
         "link": "https://search.worldcat.org/title/passion-discourses-on-blackwomens-creativity",
-        "image": "Passion Discourses screenshot.png",
+        "image": "",
         "title": "Worldcat"
     }
 ]
@@ -106,6 +106,7 @@ function main () {
     // .then((json) => {
         // const json = JSON.parse(imgs_links_sheet);
         json.forEach((file,indx)=>{
+            if (file.image !== '') {
         const currentLi = document.createElement('li');
         currentLi.classList.add('list_itme');
         currentLi.id = 'list_item_' + indx;
@@ -125,7 +126,7 @@ function main () {
         img.classList.add('south_img');
         img.id = 'south_img_' + indx;
         img.classList.add('frame_hide');
-        const currentWidth = window.innerWidth*rnd(0.15,0.25,false);
+        const currentWidth = window.innerWidth*rnd(0.25,0.45,false);
         // const currentHeight = rnd(20,30,true);
         img.width = currentWidth;
         const cloned = document.createElement('img');
@@ -225,6 +226,21 @@ function main () {
         imgDiv.addEventListener('dragenter', e => e.preventDefault());
         currentLink.appendChild(imgDiv);
         currentBtn.addEventListener('click', (e)=>onLinkHover(e, imgDiv, currentBtn));
+    } else {
+        const currentLi = document.createElement('li');
+        currentLi.classList.add('list_itme');
+        currentLi.id = 'list_item_' + indx;
+        const currentLink = document.createElement('a');
+        currentLink.target = '_blank';
+        currentLink.rel = 'noopener noreferrer';
+        currentLink.href = file.link;
+        currentLink.innerHTML = file.title;
+        currentLink.classList.add('south_img_btn');
+        currentLink.classList.add('south_img_btn_a');
+        currentLi.append(currentLink);
+        linksList.append(currentLi);
+
+    }
         })
         // console.log(json)
     // });
@@ -375,9 +391,9 @@ function onLinkHover(e, iframe, btn) {
     });
     if (!isShown) {
     btn.classList.add('south_img_btn_clicked');
-    const currentWidth = rnd(25,30,true);
+    const currentWidth = rnd(20,30,true);
     const currentHeight = rnd(20,30,true);
-    const currentWidthpx = window.innerWidth*rnd(0.15,0.2,false);
+    const currentWidthpx = window.innerWidth*rnd(0.325,0.375,false);
     iframe.width = currentWidthpx;
     iframe.children[0].width = currentWidthpx;
     iframe.style.left = rnd(18,90-currentWidth,true)+'%';

@@ -203,6 +203,8 @@ about_modal_close.addEventListener('click',() => {
     about_button_container.style.display = 'inline-block';
     about_modal.style.display = 'none';
 });
+
+
 }
 
 function onWindowResize () {
@@ -362,7 +364,7 @@ function onMouseClick () {
                     renderer.render(scene, camera);
                 },
                 onComplete: function() {
-                    window.open('./direction_south.html',"_self");
+                    window.open('./references.html',"_self");
                 },
                 ease: "power1.inOut",
             })
@@ -382,7 +384,7 @@ function onMouseClick () {
                     renderer.render(scene, camera);
                 },
                 onComplete: function() {
-                    window.open('./direction_north.html',"_self");
+                    window.open('./impact_and_influence.html',"_self");
                 },
                 ease: "power1.inOut",
             })
@@ -404,7 +406,7 @@ function onMouseClick () {
                     renderer.render(scene, camera);
                 },
                 onComplete: function() {
-                    setTimeout(()=>window.open('./direction_west_east.html',"_self"),10);
+                    setTimeout(()=>window.open('./letters_to_maud.html',"_self"),10);
                     
                 },
                 ease: "power1.inOut",
@@ -427,7 +429,7 @@ function onMouseClick () {
                     renderer.render(scene, camera);
                 },
                 onComplete: function() {
-                    setTimeout(()=>window.open('./direction_west_east.html',"_self"),10);
+                    setTimeout(()=>window.open('./letters_to_maud.html',"_self"),10);
                 },
                 ease: "power1.inOut",
             })

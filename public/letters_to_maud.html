@@ -1,7 +1,7 @@
 <!Doctype html>
 <html lang='en'>
     <head>
-        <title>Digital Devotion - Direction East/West</title>
+        <title>Digital Devotion - Letters to Maud</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" type="text/css" href="style.css">
         <script type="importmap">
@@ -34,20 +34,8 @@
               </div>
             </button>
           </div>
-          <div class="player-controls">
-            <button class="player-play-btn" 
-                    role="button" 
-                    aria-label="Play"
-                    data-playing="false"
-                    >
-              <div class="player-icon-play">
-             <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>play</title><polygon class="icon-play" points="19.05 12 6 3.36 6 20.64 19.05 12"/><rect class="icon-container" id='play-rect-icon' width="24" height="24"/></svg>
-                </div>
-              
-              <div class="player-icon-pause hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>pause</title><g><rect  class="icon-pause" x="6" y="3.26" width="4" height="17.48"/><rect class="icon-pause" x="14" y="3.26" width="4" height="17.48"/></g><rect class="icon-container" width="24" height="24"/></svg>
-              </div>
-            </button>
+          
+           
             <div class="player-timeline">
               <span class="player-time player-time-current">00:00</span>
               <div class="player-progress">
@@ -55,10 +43,55 @@
               </div>
               <span class="player-time player-time-duration">00:00</span>
             </div>
-            <div class="player-volume-container">
-                  <input type="range" id="volume" min="0" max="1" value="1.0" step="0.01" class="player-volume" />
-            </div>
+           
+            <div class="player-controls">
+              <button class="player-back-btn player-btn" 
+                      role="button" 
+                      aria-label="Play"
+                      data-playing="false">
+              <div class="player-icon-back">
+                <svg 
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="18.5px" height="19.5px" viewBox = '0 0 24 24'>
+              <path class="icon-back" fill-rule="evenodd"  stroke="rgb(0, 0, 0)" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" fill="rgb(0, 0, 0)"
+              d="M16.111,1.939 L16.111,16.935 L3.556,10.047 L3.556,16.749 L1.771,16.749 L1.771,2.117 L3.556,2.117 L3.556,8.826 L16.111,1.939 Z"/>
+              </svg>
+              </div>
+            </button>
+              <button class="player-play-btn player-btn" 
+                      role="button" 
+                      aria-label="Play"
+                      data-playing="false"
+                      >
+                     
+                <div class="player-icon-play">
+               <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>play</title><polygon class="icon-play" points="19.05 12 6 3.36 6 20.64 19.05 12"/><rect class="icon-container" id='play-rect-icon' width="24" height="24"/></svg>
+                  </div>
+                
+                <div class="player-icon-pause hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>pause</title><g><rect  class="icon-pause" x="6" y="3.26" width="4" height="17.48"/><rect class="icon-pause" x="14" y="3.26" width="4" height="17.48"/></g><rect class="icon-container" width="24" height="24"/></svg>
+                </div>
+              </button>
+              <!-- <div class="player-controls"> -->
+                <button class="player-next-btn player-btn" 
+                        role="button" 
+                        aria-label="Play"
+                        data-playing="false">
+                <div class="player-icon-back">
+                  <svg 
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="18.5px" height="19.5px">
+                 <path class="icon-next"  stroke="rgb(0, 0, 0)" stroke-width="1px" stroke-linecap="butt" stroke-linejoin="miter" fill="rgb(0, 0, 0)"
+                  d="M14.491,17.350 L14.491,10.321 L1.321,17.537 L1.321,1.828 L14.491,9.043 L14.491,2.014 L16.361,2.014 L16.361,17.350 L14.491,17.350 Z"/>
+                 </svg>
+                </div>
+              </button>
           </div>
+          <div class="player-volume-container">
+            <input type="range" id="volume" min="0" max="1" value="1.0" step="0.01" class="player-volume" />
+      </div>
           <audio src="" ></audio>
         </div>
       </div>
@@ -151,5 +184,8 @@
         </div>
         <h1 id="loading_title">Loading...</h1>
         <a  id='east_west_back_home' class='back_home' href="./index.html">back home</a>
+        <div class="reset-view-container">
+          <button type="button" class='reset-view-button'>reset view</button>
+        </div>
       </body>
 </html>

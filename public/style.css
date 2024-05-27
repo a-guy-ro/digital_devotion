@@ -50,6 +50,7 @@ max-height: 100%;
     background: linear-gradient(90deg, rgba(157, 157, 162, 0.887) 0%, rgb(215, 215, 206) 25%,rgba(218, 218, 218, 0.75) 60%,  rgb(187, 189, 194) 75%, rgba(123, 125, 126, 0.909) 100%); 
     /* background-image: url("./images/adire_fabric_edited.jpg");
     background-position: right bottom; */
+    overflow: hidden !important;
 }
 #south_text_container_title{
     position:fixed;
@@ -65,7 +66,7 @@ max-height: 100%;
 #south_text_container{
   max-height: 85%;
   margin-bottom: 5%;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 .frames_container {
@@ -74,12 +75,14 @@ max-height: 100%;
     width:85%;
     top:5%;
     left:20%;
-    overflow: scroll;
+    /* overflow: scroll; */
 }
 #south_list, ul {
     list-style: none;
     margin:0;
     padding: 0;
+    
+
 }
 .south_img_btn {
   font-family: "DotGothic16";
@@ -89,10 +92,19 @@ max-height: 100%;
   text-decoration: underline;
   cursor: pointer;
   z-index: 5;
+  font-size: 13px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+  padding-right: 6px;
+  padding-left: 6px;
+    color: black;
 }
 
-.south_img_btn_clicked {
-  color: white;
+.south_img_btn_clicked, .south_img_btn_a :active {
+  color: white!important;
+}
+.south_img_btn_a{
+  color:black!important
 }
 .list_itme a {
   /* display:none; */
@@ -104,7 +116,7 @@ max-height: 100%;
     display: block;
     width:100%;
     height:100%;
-    overflow: scroll;
+    overflow: hidden;
 
     
 }
@@ -316,6 +328,7 @@ div {
   .player_container, .player_queue {
     background: none;
     width: 20%;
+    max-width: 300px;
     right:1.5%;
     opacity: 0.95;
   }
@@ -397,7 +410,7 @@ div {
     display: inline;
   }
   .player {
-    max-width: 550px;
+    max-width: 450px;
     /* margin: 7rem auto; */
     background: none;
     padding: 0.5rem;
@@ -433,10 +446,19 @@ div {
     border: none;
   }
   .player-controls {
-    display: flex;
+    display: inline-flex;
+    width: 60%;
+    margin-left: 20%;
+    flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
-  .player-play-btn {
+  .player-next-btn, .player-back-btn  {
+    padding-top: 2.5%;
+  }
+  .player-btn {
     background: transparent;
     border: none;
     cursor: pointer;
@@ -450,10 +472,10 @@ div {
     fill: transparent;
     stroke: none;
   }
-  .player-play-btn:hover {
+  .player-btn:hover {
     fill: #444444;
   }
-  .player-play-btn svg { 
+  .player-btn svg { 
     color: #0e0e0e;
     position: relative;
     left: 0.5px;
@@ -461,7 +483,7 @@ div {
     height: 24px;
     display: block;
   }
-  .player-play-btn:hover svg {
+  .player-btn:hover svg {
     color: #ffffff;
   }
   .player-timeline {
@@ -493,6 +515,7 @@ div {
     padding: 2px 5px;
   }
   .player-volume-container {
+    display: inline-flex;
     width: 15%;
   }
   .player-volume {
@@ -593,7 +616,7 @@ div {
     /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: 100; */
   }
-  .home-button {
+  .home-button, .reset-view-container button {
     background: none;
     cursor: pointer;
     border: none;
@@ -601,6 +624,7 @@ div {
     font-size: 14px;
     font-weight: 400;
     font-family: 'DotGothic16';
+    text-decoration: underline;
 
   }
   #home-close-button{
@@ -703,4 +727,15 @@ div {
   }
   .adding-sound-title{
     display: inline;
+  }
+  .reset-view-container{
+    display: inline-block;
+    position: absolute;
+    z-index: 8;
+    padding: 0.15rem;
+    bottom:2.5%;
+    right: 2.5%;
+    color: var(--text_gray);
+    font-family: 'DotGothic16';
+
   }
