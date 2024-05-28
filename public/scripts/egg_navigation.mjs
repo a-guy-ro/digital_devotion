@@ -7,9 +7,10 @@ let theta = 0;
 const radius = 100;
 let canvas, scene, camera, renderer, egg, raycaster, pointer, sphereInter, direction_texts, touch_direction, eggStaticVector, eggBoundingBox, eggSize, myfog, light, lightVecter, cameraStartVector, footer, listener, audioLoader, tranSound;
 let eastArch, westArch, northArch, southArc, arches = [];
-let isMoving = false;
+let isMoving = false, firstTouch = false, touchCount = 0, touchType = 'mouse';
 let lastEggDirection = '';
 let frame = 0;
+// let intersects = [];
 
 main ();
 
@@ -186,8 +187,56 @@ camera.position.copy(cameraStartVector);
 requestAnimationFrame(animate);
 window.addEventListener( 'pointermove', onPointerMove );
 window.addEventListener ('resize',onWindowResize);
-window.addEventListener('click', onMouseClick);
-
+window.addEventListener('click',(e) => onMouseClick (e));
+window.addEventListener('touchstart', (e)=> {
+    console.log(touchCount);
+    touchType = 'touch'
+    pointer.x = ( e.targetTouches[0].clientX / window.innerWidth ) * 2 - 1;
+    pointer.y = - ( e.targetTouches[0].clientY / window.innerHeight ) * 2 + 1;
+    camera.updateMatrixWorld();
+    raycaster.setFromCamera( pointer, camera );
+    if (egg) {
+        const intersects = raycaster.intersectObject(egg);
+        console.log(intersects);
+        if (intersects.length > 0) {
+            touch_direction = directionDetermn(intersects[0].normal);
+            if (touch_direction === lastEggDirection) {
+                touchCount ++;
+                if (touchCount > 1) {
+                    // sphereInter.visible = false;
+                if (arches) {
+                    arches.forEach(arch=>arch.arch.visible=false);
+                }
+                if (direction_texts) {
+                    direction_texts.forEach(text=>{
+                        text.style.display = 'none';
+                    })
+                }
+                }
+            } else {
+                touchCount = 1;
+                onEggTouch(intersects);
+            }
+            console.log(touchCount);
+            
+        } else {
+            firstTouch = false;
+            touchCount = 0;
+            lastEggDirection = '';
+            touch_direction = '';
+        sphereInter.visible = false;
+        if (arches) {
+            arches.forEach(arch=>arch.arch.visible=false);
+        }
+        if (direction_texts) {
+            direction_texts.forEach(text=>{
+                text.style.display = 'none';
+            })
+        }
+        }
+    }
+    
+})
 const about_button = document.getElementById('home-about-open');
 const about_button_container = document.getElementById('about-button-container');
 const about_modal = document.getElementById('about-modal');
@@ -239,11 +288,12 @@ function render () {
     // const r = Math.PI * 2 * per;
     // light.position.set(Math.cos(r) * 5, 5, Math.sin(r) * 5 );
     // frame = (frame + 1) % maxFrame;
-    if (egg ) {
+    if (egg && touchType === 'mouse') {
     // egg.rotation.y += 0.01;
     const intersects = raycaster.intersectObject(egg);
     if ( intersects.length > 0 ) {
      onEggTouch(intersects);
+     
     } else {
         canvas.style.cursor = 'default';
         lastEggDirection = '';
@@ -265,12 +315,13 @@ function render () {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         }
-    
+    // intersects.length = 0;
     renderer.render( scene, camera );
 
 }
 
 function onEggTouch (intersects) {
+    firstTouch = true;
     canvas.style.cursor = 'pointer';
     // console.log(intersects[0].object);
     // sphereInter.visible = true;
@@ -278,7 +329,7 @@ function onEggTouch (intersects) {
     const interNormal = intersects[0].normal;
     if (typeof direction_texts != null) {
     touch_direction = directionDetermn(interNormal);
-    // console.log(touch_direction);
+    console.log(touch_direction);
     if (touch_direction.length>0 && !isMoving) {
         if (touch_direction !== lastEggDirection) {
         let endVector = new THREE.Vector3();
@@ -316,8 +367,9 @@ function onEggTouch (intersects) {
             }
             
         });
-    }
-            } else {
+    }} 
+        else {
+            console.log('resetting views');
                 canvas.style.cursor = 'default';
                 // canvas.style.cursor = 'initial';
                 // lastEggDirection = touch_direction;
@@ -333,7 +385,8 @@ function onEggTouch (intersects) {
 }
 }
 
-function onMouseClick () {
+function onMouseClick (event) {
+    // console.log(event.pointerType);
     // isEggMoving = true;
     // if (touch_direction != '') {
     //     direction_texts.forEach(text=>{
@@ -350,9 +403,14 @@ function onMouseClick () {
     let endVector = new THREE.Vector3()
     endVector.set(cameraStartVector.x,cameraStartVector.y,cameraStartVector.z);
     if (touch_direction!== '') {
+        if (touchType === 'mouse' || (event.pointerType === 'touch' && touchCount > 1)) {
         isMoving = true;
+        console.log('ismoving? ' + isMoving);
+    }
     }
     // console.log(touch_direction);
+    if (firstTouch) {
+        if (event.pointerType === 'mouse' || (event.pointerType === 'touch' && touchCount > 1)) {
     switch (touch_direction) {
         case 'South':
             gsap.to(camera.rotation,{
@@ -436,7 +494,7 @@ function onMouseClick () {
         break;
         default:
         break;
-    }
+    }}}
 }
 
 function resizeRendererToDisplaySize (renderer) {

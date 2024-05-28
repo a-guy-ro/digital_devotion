@@ -11,7 +11,7 @@ import { MeshToonMaterial } from 'three';
 
 
 let canvas, scene, camera, renderer, gradientCapsuleElement, dlRight, dlLeft, controls, eggshells, eggpowder, eggpowdersmall, raycaster, pointer, rightMirror, leftMirror, trackNamePH, trackQueuePH, trackCounter=0, ulQueue, currentDrag, nowPlaying, listener,  audioLoader;
-let objects = [], letters = [], lettersQueue = [], firstPlay = false, firstInter = false ;
+let objects = [], letters = [], lettersQueue = [], firstPlay = false, firstInter = false, touchType = 'mouse' ;
 let dracoLoader = new DRACOLoader();
 const playingPH = 'click on any object'
 
@@ -553,6 +553,58 @@ trackNamePH = document.getElementById('player-track-name-p');
 trackNamePH.innerHTML = playingPH;
 trackQueuePH = document.getElementById('player_queue_ph');
 //   window.addEventListener( 'pointermove', onPointerMove );
+canvas.addEventListener('touchstart', (e)=> {
+  camera.updateMatrixWorld();
+  pointer.x = ( e.targetTouches[0].clientX / window.innerWidth ) * 2 - 1;
+  pointer.y = - ( e.targetTouches[0].clientY / window.innerHeight ) * 2 + 1;
+  raycaster.setFromCamera( pointer, camera );
+  let sumIntersects = [];
+  objects.forEach(object=> {
+    
+    object.intersects = raycaster.intersectObject(object.object).length > 0 ? raycaster.intersectObject(object.object) : [];
+    // console.log(object.intersects);
+    // object.intersects.forEach(inter=>sumIntersects.push(inter));
+    sumIntersects.push(object.intersects);
+    if (object.intersects.length > 0) {
+      object.isHovered = true;
+      //window.addEventListener('click', objectClickHandle(object));
+    } else {
+      object.isHovered = false;
+      //window.removeEventListener('click', objectClickHandle(object));
+    }
+      if (!object.isHovered && object.name !== 'mirror'){
+        // if (object.name === 'mirror') {
+        //   const yInt = Math.random()*0.001;
+        //   const xInt = Math.random()*0.0001;
+        //   object.object.rotation.x += xInt;
+        //   leftMirror.rotation.x += xInt;
+        //   rightMirror.rotation.x += xInt;
+        //   object.object.rotation.y += yInt;
+        //   leftMirror.rotation.y += yInt;
+        //   rightMirror.rotation.y += yInt;
+        // } else {
+      object.object.rotation.y += Math.random()*0.001;
+      object.object.rotation.x += Math.random()*0.0001;
+    // }
+    }
+    })
+    if (sumIntersects[0].length === 0) {
+      console.log('touch no intersect!');
+      if (!firstInter) {
+        firstInter = true;
+        objects.forEach(obj=>
+          {
+            if (typeof obj.posAudio !== 'string') {
+              // if (!obj.posAudio.isPlaying) {
+              obj.posAudio.setLoop(true);
+              obj.posAudio.play();
+            // }
+          }
+        }
+        )
+      }
+    }
+})
 canvas.addEventListener('click', e=> objectClickHandle(e))
 window.addEventListener ('resize',onWindowResize);
 window.addEventListener( 'pointermove', onPointerMove );
