@@ -200,6 +200,7 @@ window.addEventListener('touchstart', (e)=> {
         console.log(intersects);
         if (intersects.length > 0) {
             touch_direction = directionDetermn(intersects[0].normal);
+            console.log(touch_direction);
             if (touch_direction === lastEggDirection) {
                 touchCount ++;
                 if (touchCount > 1) {
@@ -211,6 +212,90 @@ window.addEventListener('touchstart', (e)=> {
                     direction_texts.forEach(text=>{
                         text.style.display = 'none';
                     })
+                }
+                switch (touch_direction) {
+                    case 'South':
+                        gsap.to(camera.rotation,{
+                            duration: 1.5,
+                            x: Math.PI*0.35,
+                            onUpdate: function () {
+                                // camera.rotation.x = x;
+                                camera.updateProjectionMatrix();
+                                renderer.render(scene, camera);
+                            },
+                            onComplete: function() {
+                                window.open('./references.html',"_self");
+                            },
+                            ease: "power1.inOut",
+                        })
+                        // endVector.y+=10;
+                        // requestAnimationFrame(()=>pageMoveAnimation(0,Math.PI/2,Date.now(),0,30000, './direction_south.html'));
+                        // window.open('./direction_south.html',"_self");
+                    break;
+                    case 'North':
+                        // requestAnimationFrame(()=>pageMoveAnimation(0,-Math.PI/2,Date.now(),0,30000, './direction_north.html'));
+                        // window.open('./direction_north.html',"_self");
+                        gsap.to(camera.rotation,{
+                            duration: 1.5,
+                            x: -Math.PI*0.35,
+                            onUpdate: function () {
+                                // camera.rotation.x = x;
+                                camera.updateProjectionMatrix();
+                                renderer.render(scene, camera);
+                            },
+                            onComplete: function() {
+                                window.open('./impact_and_influence.html',"_self");
+                            },
+                            ease: "power1.inOut",
+                        })
+                    break;
+                    case 'East':
+                        footer.style.display = 'none';
+                        about_button_container.style.display ='none';
+                        setTimeout(()=> {
+                            tranSound.play();
+                            fadeIn(tranSound.getVolume(),0.45,intCalculator(250,tranSound.getVolume(),0.45));
+                        },500);
+                        // window.open('./direction_west_east.html',"_self");
+                        gsap.to(camera.position,{
+                            duration: 4.5,
+                            z: -0.75,
+                            onUpdate: function () {
+                                // camera.rotation.x = x;
+                                camera.updateProjectionMatrix();
+                                renderer.render(scene, camera);
+                            },
+                            onComplete: function() {
+                                setTimeout(()=>window.open('./letters_to_maud.html',"_self"),10);
+                                
+                            },
+                            ease: "power1.inOut",
+                        })
+                    break;
+                    case 'West':
+                        footer.style.display = 'none';
+                        about_button_container.style.display ='none';
+                        setTimeout(()=> {
+                            tranSound.play();
+                            fadeIn(tranSound.getVolume(),0.45,intCalculator(250,tranSound.getVolume(),0.45));
+                        },500);
+                        // window.open('./direction_west_east.html',"_self");
+                        gsap.to(camera.position,{
+                            duration: 4.5,
+                            z: -0.75,
+                            onUpdate: function () {
+                                // camera.rotation.x = x;
+                                camera.updateProjectionMatrix();
+                                renderer.render(scene, camera);
+                            },
+                            onComplete: function() {
+                                setTimeout(()=>window.open('./letters_to_maud.html',"_self"),10);
+                            },
+                            ease: "power1.inOut",
+                        })
+                    break;
+                    default:
+                    break;
                 }
                 }
             } else {
@@ -224,7 +309,7 @@ window.addEventListener('touchstart', (e)=> {
             touchCount = 0;
             lastEggDirection = '';
             touch_direction = '';
-        sphereInter.visible = false;
+        // sphereInter.visible = false;
         if (arches) {
             arches.forEach(arch=>arch.arch.visible=false);
         }
@@ -329,7 +414,7 @@ function onEggTouch (intersects) {
     const interNormal = intersects[0].normal;
     if (typeof direction_texts != null) {
     touch_direction = directionDetermn(interNormal);
-    console.log(touch_direction);
+    // console.log(touch_direction);
     if (touch_direction.length>0 && !isMoving) {
         if (touch_direction !== lastEggDirection) {
         let endVector = new THREE.Vector3();
@@ -386,7 +471,7 @@ function onEggTouch (intersects) {
 }
 
 function onMouseClick (event) {
-    // console.log(event.pointerType);
+    console.log('mouse click!');
     // isEggMoving = true;
     // if (touch_direction != '') {
     //     direction_texts.forEach(text=>{
