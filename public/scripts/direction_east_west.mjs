@@ -173,7 +173,7 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     posAudio: '',
     sound_title: 'letter_part_7',
     rotateZ: Math.PI,
-    img: 'no',
+    img: [{index: 8, timecode: '00:00', hasAppeared: false}],
     elementalMenu: '00:00',
     scale:1.5
   }
@@ -188,7 +188,7 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     posAudio: '',
     sound_title: 'letter_part_6',
     rotateZ: 0,
-    img: 'no',
+    img: [{index: 7, timecode: '00:00', hasAppeared: false}],
     elementalMenu: '00:00',
     scale:2.5
   }
@@ -203,7 +203,8 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     posAudio: '',
     sound_title: 'letter_part_3',
     rotateZ: 0,
-    img: {index: 2, timecode: '00:46', hasAppeared: false},
+    img: [{index: 5, timecode: '00:00', hasAppeared: false},{index: 2, timecode: '00:52', hasAppeared: false}],
+    imgIndex: 0,
     elementalMenu: '00:00',
     scale:1.5
   }
@@ -251,7 +252,7 @@ const flowersObject = {
   posAudio: '',
   sound_title: 'letter_part_1',
   rotateZ: 0,
-  img: 'no',
+  img: [{index: 6, timecode: '00:00', hasAppeared: false}],
   elementalMenu: 'no',
   scale:1
 }
@@ -269,7 +270,7 @@ const scarabObject = {
   posAudio: '',
   sound_title: 'letter_part_5',
   rotateZ: Math.PI,
-  img: {index: 4, timecode: '00:00', hasAppeared: false},
+  img: [{index: 4, timecode: '00:00', hasAppeared: false}],
   elementalMenu: '00:00',
   scale: 2.2
 }
@@ -285,7 +286,7 @@ const drumObject = {
   posAudio: '',
   sound_title: 'letter_part_2',
   rotateZ: 0,
-  img: {index: 1, timecode: '00:00', hasAppeared: false},
+  img: [{index: 1, timecode: '00:00', hasAppeared: false}],
   elementalMenu: '00:58',
   scale: 3
 }
@@ -301,7 +302,7 @@ const staffObject = {
   posAudio: '',
   sound_title: 'letter_part_4',
   rotateZ: Math.PI,
-  img: {index: 3, timecode: '00:00', hasAppeared: false},
+  img: [{index: 3, timecode: '00:00', hasAppeared: false}],
   elementalMenu: '00:00',
   scale: 2.5
   // -Math.PI*0.35
@@ -418,6 +419,23 @@ const cameraStartVector = new THREE.Vector3(0,-12.25,0);
 camera.position.copy(cameraStartVector);
 camera.lookAt(eggshells.position.x,eggshells.position.y+5,eggshells.position.z);
 camera.updateProjectionMatrix();
+const introDiv = document.querySelector('.intro-modal');
+const introBtn = document.querySelector('.intro-start-button');
+const playercontainer = document.querySelector('.player_container');
+const playerQueueCont = document.querySelector('.player-queue-container');
+const controlerContainer = document.querySelector('#controls_text_container');
+const resetViewBtn = document.querySelector('.reset-view-button');
+
+introBtn.addEventListener('click', ()=> {
+introDiv.classList.add('hidden');
+playercontainer.classList.remove('hidden');
+controlerContainer.classList.remove('hidden');
+resetViewBtn.classList.remove('hidden');
+playerQueueCont.classList.remove('hidden');
+setTimeout (()=>objectVisible(objects[0],0),500);
+
+})
+
 const gsapTL = gsap.timeline();
 gsapTL.add(opacityAnimation(gradientCapsuleElement,2,1.0),0.1);
 eggshells.children[0].children.forEach(mesh=> {
@@ -429,6 +447,7 @@ eggpowder.children[0].children.forEach(mesh=> {
       if (mesh.isMesh) {
       mesh.material.opacity = 0.95;
       }});
+      
     // controls.enabled = true;
     // render();
   }),"<")
@@ -441,8 +460,8 @@ powders.forEach(powder=> {
         mesh.material.opacity = 0.95;
         }});
         // let index = 0;
-        setTimeout (()=>objectVisible(objects[0],0),750);
         
+      setTimeout(()=>introDiv.classList.remove('hidden'),500);  
       controls.enabled = true;
       render();
     }),"<")
@@ -453,40 +472,39 @@ powders.forEach(powder=> {
 gsapTL.resume();
 audioPlayerInit();
 
-window.addEventListener('keydown',() => {
-  if (!firstInter) {
-    firstInter = true;
-    objects.forEach(obj=>
-      {
-        if (typeof obj.posAudio !== 'string') {
-          // if (!obj.posAudio.isPlaying) {
-          obj.posAudio.setLoop(true);
-          obj.posAudio.play();
-          console.log(obj.posAudio);
-        // }
-      }
-    }
-    )
-  }
-})
+// window.addEventListener('keydown',() => {
+//   if (!firstInter) {
+//     firstInter = true;
+//     objects.forEach(obj=>
+//       {
+//         if (typeof obj.posAudio !== 'string') {
+//           // if (!obj.posAudio.isPlaying) {
+//           obj.posAudio.setLoop(true);
+//           obj.posAudio.play();
+//           console.log(obj.posAudio);
+//         // }
+//       }
+//     }
+//     )
+//   }
+// })
 
-window.addEventListener('click', ()=> {
-  if (!firstInter) {
-    firstInter = true;
-    objects.forEach(obj=>
-      {
-        if (typeof obj.posAudio !== 'string') {
-          // if (!obj.posAudio.isPlaying) {
-          obj.posAudio.setLoop(true);
-          obj.posAudio.play();
-        // }
-      }
-    }
-    )
-  }
-});
+// window.addEventListener('click', ()=> {
+//   if (!firstInter) {
+//     firstInter = true;
+//     objects.forEach(obj=>
+//       {
+//         if (typeof obj.posAudio !== 'string') {
+//           // if (!obj.posAudio.isPlaying) {
+//           obj.posAudio.setLoop(true);
+//           obj.posAudio.play();
+//         // }
+//       }
+//     }
+//     )
+//   }
+// });
 
-const resetViewBtn = document.querySelector('.reset-view-button');
 resetViewBtn.addEventListener('click', ()=> {
   camera.position.copy(cameraStartVector);
   camera.lookAt(eggshells.position.x,eggshells.position.y+5,eggshells.position.z);
@@ -588,22 +606,22 @@ canvas.addEventListener('touchstart', (e)=> {
     // }
     }
     })
-    if (sumIntersects[0].length === 0) {
-      console.log('touch no intersect!');
-      if (!firstInter) {
-        firstInter = true;
-        objects.forEach(obj=>
-          {
-            if (typeof obj.posAudio !== 'string') {
-              // if (!obj.posAudio.isPlaying) {
-              obj.posAudio.setLoop(true);
-              obj.posAudio.play();
-            // }
-          }
-        }
-        )
-      }
-    }
+    // if (sumIntersects[0].length === 0) {
+    //   console.log('touch no intersect!');
+    //   if (!firstInter) {
+    //     firstInter = true;
+    //     objects.forEach(obj=>
+    //       {
+    //         if (typeof obj.posAudio !== 'string') {
+    //           // if (!obj.posAudio.isPlaying) {
+    //           obj.posAudio.setLoop(true);
+    //           obj.posAudio.play();
+    //         // }
+    //       }
+    //     }
+    //     )
+    //   }
+    // }
 })
 canvas.addEventListener('click', e=> objectClickHandle(e))
 window.addEventListener ('resize',onWindowResize);
@@ -617,7 +635,7 @@ function onQueueClick(btn) {
   const queueDiv = document.getElementById('player_queue');
   const iconActiveSpan = document.getElementById('player-icon-active-span');
   const iconSpan = document.getElementById('player-icon-span');
-  if (queueDiv.style.display === 'none'||queueDiv.style.display.length ===0) {
+  if (queueDiv.style.display === 'none') {
     queueDiv.style.display = 'block';
     iconActiveSpan.style.display = 'inline';
     iconSpan.style.display = 'none';
@@ -710,7 +728,8 @@ function objectClickHandle(e) {
         title: object.sound_title,
         id: trackCounter,
         img: object.img,
-        elementalMenu: object.elementalMenu
+        elementalMenu: object.elementalMenu,
+        imgIndex: object.imgIndex
         }
         trackNamePH.innerHTML = nowPlaying.title.replace(/_/g,' ');
         if (!firstPlay) {
@@ -1060,19 +1079,24 @@ for (let i=0;i<elementalItems.length;i++) {
         //  
       // }
       // track = audioCtx.createMediaElementSource(audios[nowPlaying.sound-1]);
-      stopElemental();
+      // stopElemental();
       audios[nowPlaying.sound-1].audio.play();
       
       console.log('playing ' + audios[nowPlaying.sound-1].audio.src);
       playButton.dataset.playing = "true";
       playIcon.classList.add("hidden");
       pauseIcon.classList.remove("hidden");
-      if (nowPlaying.img !== 'no'){ 
-        if(nowPlaying.img.hasAppeared || nowPlaying.img.timecode === '00:00') {
-        nowPlaying.img.hasAppeared = true;
-        imgs[nowPlaying.img.index-1].classList.add('letters_images_container_show');
-        imgs[nowPlaying.img.index-1].classList.remove('letters_images_container_hide');
+      if (nowPlaying.img.length === 1){ 
+        if(nowPlaying.img[0].hasAppeared || nowPlaying.img[0].timecode === '00:00') {
+        nowPlaying.img[0].hasAppeared = true;
+        imgs[nowPlaying.img[0].index-1].classList.add('letters_images_container_show');
+        imgs[nowPlaying.img[0].index-1].classList.remove('letters_images_container_hide');
         }
+      } else {
+        const currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
+        nowPlaying.img[nowPlaying.imgIndex].hasAppeared = true;
+        imgs[currentIndex].classList.add('letters_images_container_show');
+        imgs[currentIndex].classList.remove('letters_images_container_hide');
       }
       if (!hasPlayed) {
         soundsMenu.classList.remove('letters_images_container_show');
@@ -1091,11 +1115,16 @@ for (let i=0;i<elementalItems.length;i++) {
       playButton.dataset.playing = "false";
       pauseIcon.classList.add("hidden");
       playIcon.classList.remove("hidden");
-      if (nowPlaying.img !== 'no') {
-        if (nowPlaying.img.hasAppeared) {
-        imgs[nowPlaying.img.index-1].classList.remove('letters_images_container_show');
-        imgs[nowPlaying.img.index-1].classList.add('letters_images_container_hide');
+      if (nowPlaying.img.length === 1) {
+        if (nowPlaying.img[0].hasAppeared) {
+        imgs[nowPlaying.img[0].index-1].classList.remove('letters_images_container_show');
+        imgs[nowPlaying.img[0].index-1].classList.add('letters_images_container_hide');
       }
+      } else {
+        const currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
+        imgs[currentIndex].classList.remove('letters_images_container_show');
+        imgs[currentIndex].classList.add('letters_images_container_hide');
+
       }
       
     }
@@ -1105,8 +1134,8 @@ for (let i=0;i<elementalItems.length;i++) {
   nextButton.addEventListener("click", ()=> {
     audios[nowPlaying.sound-1].audio.currentTime = audios[nowPlaying.sound-1].audio.duration-0.1;
     // progressUpdate();
-    audios[nowPlaying.sound-1].audio.pause();
-    onEndedHandler();
+    // audios[nowPlaying.sound-1].audio.pause();
+    // onEndedHandler();
   });
 
   backButton.addEventListener("click",()=>{
@@ -1127,11 +1156,11 @@ for (let i=0;i<elementalItems.length;i++) {
       audios[nowPlaying.sound-1].gain.gain.value = volumeControl.value
   }
     elementalItems.forEach(item=>item.gain.gain.value = volumeControl.value * elementalOffset);
-    objects.forEach(object=> {
-      if (object.posAudio !== '') {
-        object.posAudio.setVolume(object.posAudioVol*volumeControl.value);
-      }
-    })
+    // objects.forEach(object=> {
+    //   if (object.posAudio !== '') {
+    //     object.posAudio.setVolume(object.posAudioVol*volumeControl.value);
+    //   }
+    // })
   })
 
   
@@ -1150,12 +1179,22 @@ for (let i=0;i<elementalItems.length;i++) {
     const percent = (audios[nowPlaying.sound-1].audio.currentTime / audios[nowPlaying.sound-1].audio.duration) * 100;
 
     progressFilled.style.flexBasis = `${percent}%`;
-    if (nowPlaying.img !== 'no') {
-      if (nowPlaying.img.timecode === playerCurrentTime.textContent.substring(3,8) && !nowPlaying.img.hasAppeared) {
-        nowPlaying.img.hasAppeared = true;
-        imgs[nowPlaying.img.index-1].classList.add('letters_images_container_show');
-        imgs[nowPlaying.img.index-1].classList.remove('letters_images_container_hide');
+    if (nowPlaying.img.length === 1) {
+      if (nowPlaying.img[0].timecode === playerCurrentTime.textContent.substring(3,8) && !nowPlaying.img[0].hasAppeared) {
+        nowPlaying.img[0].hasAppeared = true;
+        imgs[nowPlaying.img[0].index-1].classList.add('letters_images_container_show');
+        imgs[nowPlaying.img[0].index-1].classList.remove('letters_images_container_hide');
       }
+    } else if (nowPlaying.img[1].timecode === playerCurrentTime.textContent.substring(3,8) && !nowPlaying.img[1].hasAppeared) {
+      let currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
+      imgs[currentIndex].classList.remove('letters_images_container_show');
+      imgs[currentIndex].classList.add('letters_images_container_hide');
+      // nowPlaying.img[imgIndex].hasAppeared = false;
+      nowPlaying.imgIndex = 1;
+      currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
+      imgs[currentIndex].classList.add('letters_images_container_show');
+      imgs[currentIndex].classList.remove('letters_images_container_hide');
+      nowPlaying.img[nowPlaying.imgIndex].hasAppeared = true;
     }
     if (nowPlaying.elementalMenu !== '00:00' && nowPlaying.elementalMenu === playerCurrentTime.textContent.substring(3,8)) {
       soundsMenu.classList.add('letters_images_container_show');
@@ -1175,19 +1214,19 @@ for (let i=0;i<elementalItems.length;i++) {
     progressFilled.style.flexBasis = "0%"
     audios[nowPlaying.sound-1].currentTime = 0;
     hasPlayed = false;
-    if (nowPlaying.img !== 'no') {
-      nowPlaying.img.hasAppeared = false;
-      imgs[nowPlaying.img.index-1].classList.remove('letters_images_container_show');
-        imgs[nowPlaying.img.index-1].classList.add('letters_images_container_hide');
-    }
+    nowPlaying.img.forEach(img=> {
+      img.hasAppeared = false;
+      imgs[img.index-1].classList.remove('letters_images_container_show');
+      imgs[img.index-1].classList.add('letters_images_container_hide');
+    })
     if (nowPlaying.elementalMenu === '00:00') {
       soundsMenu.classList.add('letters_images_container_show');
       soundsMenu.classList.remove('letters_images_container_hide');
     }
 
-    if (nowPlaying.img === 'no' && nowPlaying.elementalMenu !== '00:00') {
-      playElemental();
-    }
+    // if (nowPlaying.img === 'no' && nowPlaying.elementalMenu !== '00:00') {
+    //   // playElemental();
+    // }
     
     // audios[nowPlaying.sound-1].audio.duration = audios[nowPlaying.sound-1].audio.duration;
     if (lettersQueue.length > 0) {
@@ -1237,50 +1276,50 @@ for (let i=0;i<elementalItems.length;i++) {
   progress.addEventListener("mouseup", () => (mousedown = false))
 // })
 function stopElemental () {
-  objects.forEach(obj=>
-    {
-      if (typeof obj.posAudio !== 'string') {
-        // if (!obj.posAudio.isPlaying) {
-        fadeVol(obj.posAudioVol*volumeControl.value,0,0.01,obj.posAudio);
-        // obj.posAudio.stop();
+  // objects.forEach(obj=>
+  //   {
+  //     if (typeof obj.posAudio !== 'string') {
+  //       // if (!obj.posAudio.isPlaying) {
+  //       fadeVol(obj.posAudioVol*volumeControl.value,0,0.01,obj.posAudio);
+  //       // obj.posAudio.stop();
         
-      // }
-    }
-  }
-  )
+  //     // }
+  //   }
+  // }
+  // )
 }
 function playElemental () {
-  objects.forEach(obj=>
-    {
-      if (typeof obj.posAudio !== 'string') {
-        // if (!obj.posAudio.isPlaying) {
-        obj.posAudio.setLoop(true);
-        obj.posAudio.play();
-        fadeVol(0,obj.posAudioVol*volumeControl.value,0.01,obj.posAudio);
-      // }
-    }
-  }
-  )
+  // objects.forEach(obj=>
+  //   {
+  //     if (typeof obj.posAudio !== 'string') {
+  //       // if (!obj.posAudio.isPlaying) {
+  //       obj.posAudio.setLoop(true);
+  //       obj.posAudio.play();
+  //       fadeVol(0,obj.posAudioVol*volumeControl.value,0.01,obj.posAudio);
+  //     // }
+  //   }
+  // }
+  // )
 }
 
 function fadeVol (vol, end, interval, soundElement) {
-  // if (end > vol) {}
-  if (Math.abs(end-vol) > interval) {
-    if (end > vol) {
-      vol += interval;
-    } else {
-      vol -= interval;
-    }
-      soundElement.setVolume(vol);
-      // console.log(soundElement.getVolume());
-      setTimeout(()=>fadeVol (vol,end,interval, soundElement),1);
+//   // if (end > vol) {}
+//   if (Math.abs(end-vol) > interval) {
+//     if (end > vol) {
+//       vol += interval;
+//     } else {
+//       vol -= interval;
+//     }
+//       soundElement.setVolume(vol);
+//       // console.log(soundElement.getVolume());
+//       setTimeout(()=>fadeVol (vol,end,interval, soundElement),1);
 
-  } else {
-      soundElement.setVolume(end);
-      if (end === 0) {
-        soundElement.stop();
-      }
-  }
+//   } else {
+//       soundElement.setVolume(end);
+//       if (end === 0) {
+//         soundElement.stop();
+//       }
+//   }
 
 }
 }
