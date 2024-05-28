@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-import { gsap } from "gsap";
+// import gsap from "gsap";
 
 let theta = 0;
 const radius = 100;
