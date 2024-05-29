@@ -746,7 +746,8 @@ function objectClickHandle(e) {
         title: object.sound_title,
         id: trackCounter,
         img: object.img,
-        elementalMenu: object.elementalMenu
+        elementalMenu: object.elementalMenu,
+        imgIndex: object.imgIndex
       })
     }
       if (lettersQueue.length > 0) { 
@@ -1069,7 +1070,7 @@ for (let i=0;i<elementalItems.length;i++) {
     if (typeof nowPlaying !== 'undefined') {
     if (audios[nowPlaying.sound-1].ctx.state === "suspended") {
       audios[nowPlaying.sound-1].ctx.resume()
-      stopElemental();
+      // stopElemental();
     }
     // Play or pause track depending on state 
     if (playButton.dataset.playing === "false") {
@@ -1110,7 +1111,7 @@ for (let i=0;i<elementalItems.length;i++) {
       // }
     } else if (playButton.dataset.playing === "true") {
       audios[nowPlaying.sound-1].audio.pause();
-      playElemental();
+      // playElemental();
       elementalItems.forEach(item=>item.children[0].children[0].pause());
       playButton.dataset.playing = "false";
       pauseIcon.classList.add("hidden");
@@ -1179,13 +1180,16 @@ for (let i=0;i<elementalItems.length;i++) {
     const percent = (audios[nowPlaying.sound-1].audio.currentTime / audios[nowPlaying.sound-1].audio.duration) * 100;
 
     progressFilled.style.flexBasis = `${percent}%`;
-    if (nowPlaying.img.length === 1) {
+    // if (nowPlaying.img.length === 1) {
       if (nowPlaying.img[0].timecode === playerCurrentTime.textContent.substring(3,8) && !nowPlaying.img[0].hasAppeared) {
         nowPlaying.img[0].hasAppeared = true;
         imgs[nowPlaying.img[0].index-1].classList.add('letters_images_container_show');
         imgs[nowPlaying.img[0].index-1].classList.remove('letters_images_container_hide');
       }
-    } else if (nowPlaying.img[1].timecode === playerCurrentTime.textContent.substring(3,8) && !nowPlaying.img[1].hasAppeared) {
+    // } else 
+    if (nowPlaying.img.length > 1) {
+      if (nowPlaying.img[1].timecode === playerCurrentTime.textContent.substring(3,8) && !nowPlaying.img[1].hasAppeared) {
+        console.log(nowPlaying.imgIndex);
       let currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
       imgs[currentIndex].classList.remove('letters_images_container_show');
       imgs[currentIndex].classList.add('letters_images_container_hide');
@@ -1200,7 +1204,7 @@ for (let i=0;i<elementalItems.length;i++) {
       soundsMenu.classList.add('letters_images_container_show');
       soundsMenu.classList.remove('letters_images_container_hide');
     }
-  }
+  }}
   // Scrub player timeline to skip forward and back on click for easier UX 
   let mousedown = false
   function scrub(event) {
@@ -1233,15 +1237,36 @@ for (let i=0;i<elementalItems.length;i++) {
       nowPlaying = lettersQueue.shift();
       ulQueue.children[0].remove();
       trackNamePH.innerHTML = nowPlaying.title.replace(/_/g,' ');
-      console.log(nowPlaying);
+      // console.log(nowPlaying);
       setTimes();
       
       // progressUpdate();
       // audioElement = audios[nowPlaying.sound-1];
-      audios[nowPlaying.sound-1].gain.gain.value = volumeControl.value
-      playButton.dataset.playing = "false"
-      pauseIcon.classList.add("hidden")
-      playIcon.classList.remove("hidden")
+      audios[nowPlaying.sound-1].gain.gain.value = volumeControl.value;
+      if (playButton.dataset.playing === 'false') {
+        playButton.dataset.playing = "true";
+        pauseIcon.classList.remove("hidden");
+        playIcon.classList.add("hidden");
+      }
+      audios[nowPlaying.sound-1].audio.play();
+      // if (nowPlaying.img.length === 1){ 
+      //   if(nowPlaying.img[0].hasAppeared || nowPlaying.img[0].timecode === '00:00') {
+      //   nowPlaying.img[0].hasAppeared = true;
+      //   imgs[nowPlaying.img[0].index-1].classList.add('letters_images_container_show');
+      //   imgs[nowPlaying.img[0].index-1].classList.remove('letters_images_container_hide');
+      //   }
+      // } else {
+      //   const currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
+      //   nowPlaying.img[nowPlaying.imgIndex].hasAppeared = true;
+      //   imgs[currentIndex].classList.add('letters_images_container_show');
+      //   imgs[currentIndex].classList.remove('letters_images_container_hide');
+      // }
+      if (!hasPlayed) {
+        soundsMenu.classList.remove('letters_images_container_show');
+        soundsMenu.classList.add('letters_images_container_hide');
+        
+        hasPlayed = true;
+      }
       // setTimeout(()=>audios[nowPlaying.sound-1].audio.play(),50);
     //   if (nowPlaying.img !== 'no') {
     //     if (nowPlaying.img.timecode === '00:00') {
@@ -1254,7 +1279,7 @@ for (let i=0;i<elementalItems.length;i++) {
       if (lettersQueue.length === 0) {
         // trackQueuePH = 'Click on an object to add audio letters to the queue';
         trackQueuePH.style.display = 'block';
-          ulQueue.style.display = 'none';
+        ulQueue.style.display = 'none';
       }
     } else {
       console.log('no more tracks queued!');

@@ -369,12 +369,12 @@ div {
     display: none!important;
   }
   .intro-modal{
-    width: 40%;
-    max-height: 40vh;
+    max-width: 45%;
+    max-height: 30vh;
     background-color: none;
     /* opacity: 0.15; */
     left:30%;
-    top: 20vh;
+    top: 15vh;
     position:absolute;
     display: block;
     z-index: 15;
