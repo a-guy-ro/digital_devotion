@@ -1133,6 +1133,7 @@ for (let i=0;i<elementalItems.length;i++) {
   })
 
   nextButton.addEventListener("click", ()=> {
+    console.log('next!');
     audios[nowPlaying.sound-1].audio.currentTime = audios[nowPlaying.sound-1].audio.duration-0.1;
     // progressUpdate();
     // audios[nowPlaying.sound-1].audio.pause();
