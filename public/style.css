@@ -88,9 +88,10 @@ max-height: 100%;
   /* width: 84; */
   flex: var(--vid-width);
   flex-grow:unset;
-  margin-top: 4%;
-  margin-left: 4%;
+  margin-top: 17.5vh;
+  margin-left: 35vh;
   z-index: 0;
+  max-height: 100%;
   /* margin-right: 1rem; */
 }
 /* #embed-vid-2{
@@ -99,7 +100,8 @@ max-height: 100%;
 #south_text_container{
   display: block;
   position:flex;
-  width:7.5%;
+  flex: calc(var(--vid-width) / 2);
+  /* width:7.5%; */
   height: 85%;
   margin-top: 1%;
   /* margin-left: 2.5%; */
