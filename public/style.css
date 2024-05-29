@@ -370,17 +370,16 @@ div {
   }
   .intro-modal{
     width: 40%;
+    max-height: 40vh;
     background-color: none;
     /* opacity: 0.15; */
     left:30%;
-    top: 20%;
+    top: 20vh;
     position:absolute;
     display: block;
     z-index: 15;
     border-radius: 14px;
     animation: fadeIn 3s;
-
-
   }
   .intro-modal p {
     padding: 2.5%;

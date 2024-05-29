@@ -4,7 +4,7 @@ import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js'
 import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 import { Reflector } from 'three/addons/objects/Reflector.js';
-import { gsap } from "gsap";
+// import { gsap } from "gsap";
 import { MeshToonMaterial } from 'three';
 
 
