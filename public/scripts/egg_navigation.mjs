@@ -407,6 +407,7 @@ function render () {
 
 function onEggTouch (intersects) {
     firstTouch = true;
+    // console.log(firstTouch);
     canvas.style.cursor = 'pointer';
     // console.log(intersects[0].object);
     // sphereInter.visible = true;
@@ -454,7 +455,7 @@ function onEggTouch (intersects) {
         });
     }} 
         else {
-            console.log('resetting views');
+            // console.log('resetting views');
                 canvas.style.cursor = 'default';
                 // canvas.style.cursor = 'initial';
                 // lastEggDirection = touch_direction;
@@ -472,6 +473,7 @@ function onEggTouch (intersects) {
 
 function onMouseClick (event) {
     console.log('mouse click!');
+    // const eventType = event.pointerType || event.type;
     // isEggMoving = true;
     // if (touch_direction != '') {
     //     direction_texts.forEach(text=>{
@@ -488,14 +490,16 @@ function onMouseClick (event) {
     let endVector = new THREE.Vector3()
     endVector.set(cameraStartVector.x,cameraStartVector.y,cameraStartVector.z);
     if (touch_direction!== '') {
-        if (touchType === 'mouse' || (event.pointerType === 'touch' && touchCount > 1)) {
+        if (touchType === 'mouse' || (touchType === 'touch' && touchCount > 1)) {
         isMoving = true;
         console.log('ismoving? ' + isMoving);
     }
     }
     // console.log(touch_direction);
+    // console.log(event);
     if (firstTouch) {
-        if (event.pointerType === 'mouse' || (event.pointerType === 'touch' && touchCount > 1)) {
+        if (touchType === 'mouse' || (touchType === 'touch' && touchCount > 1)) {
+            
     switch (touch_direction) {
         case 'South':
             gsap.to(camera.rotation,{
