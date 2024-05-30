@@ -663,8 +663,10 @@ canvas.addEventListener('touchmove', e=> {
 
 // }
 canvas.addEventListener('click', e=> objectClickHandle(e))
+canvas.addEventListener('wheel', e=>e.preventDefault());
 window.addEventListener ('resize',onWindowResize);
 window.addEventListener( 'pointermove', onPointerMove );
+// window.addEventListener()
 // document.querySelector("body").longclick(250, (e)=>   e.preventDefault());
 
   
