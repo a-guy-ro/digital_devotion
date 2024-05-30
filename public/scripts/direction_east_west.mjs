@@ -573,6 +573,15 @@ trackNamePH.innerHTML = playingPH;
 trackQueuePH = document.getElementById('player_queue_ph');
 //   window.addEventListener( 'pointermove', onPointerMove );
 canvas.addEventListener('touchstart', (e)=> {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+    // console.log('2');
+    // _state = STATE.TOUCH_ZOOM_PAN;
+    // var dx = e.touches[ 0 ].pageX - e.touches[ 1 ].pageX;
+    // var dy = e.touches[ 0 ].pageY - e.touches[ 1 ].pageY;
+    // _touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
+
+  } else {
   camera.updateMatrixWorld();
   pointer.x = ( e.targetTouches[0].clientX / window.innerWidth ) * 2 - 1;
   pointer.y = - ( e.targetTouches[0].clientY / window.innerHeight ) * 2 + 1;
@@ -623,7 +632,35 @@ canvas.addEventListener('touchstart', (e)=> {
     //     )
     //   }
     // }
+}})
+canvas.addEventListener('touchmove', e=> {
+  if (e.touches.length == 2) {
+
+//     var dx = e.touches[ 0 ].pageX - e.touches[ 1 ].pageX;
+//     var dy = e.touches[ 0 ].pageY - e.touches[ 1 ].pageY;
+//     _touchZoomDistanceEnd = Math.sqrt( dx * dx + dy * dy );
+
+//  var factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+//  _touchZoomDistanceStart = _touchZoomDistanceEnd;
+//  setZoom(camera.fov * factor);
+
+}
 })
+
+// canvas.addEventListener('touchend',()=> {
+//   _touchZoomDistanceStart = _touchZoomDistanceEnd = 0;
+// })
+
+// function setZoom(fov){
+
+//   camera.fov = fov;
+
+//   if(camera.fov < 30) camera.fov = 30;
+//   if(camera.fov > 100) camera.fov = 100;
+
+//   camera.updateProjectionMatrix();
+
+// }
 canvas.addEventListener('click', e=> objectClickHandle(e))
 window.addEventListener ('resize',onWindowResize);
 window.addEventListener( 'pointermove', onPointerMove );
@@ -811,11 +848,38 @@ function queueLiCreator (trackId) {
     currentDrag = li;
   console.log(currentDrag);
 });
-// li.addEventListener('touchstart', ()=> currentDrag = li);
+li.addEventListener('touchstart', ()=> currentDrag = li);
 li.addEventListener('dragend', e => e.preventDefault());
   
 li.ondragover = e => e.preventDefault();
 li.ondragenter = e => e.preventDefault();
+li.addEventListener('touchend', e => {
+  console.log(e.touches);
+  const touchX = e.touches[0].pageX;
+  const touchY = e.touches[0].pageY;
+  e.preventDefault();
+  let droppedIndex = -1;
+  console.log(ulQueue.children.length);
+  for (let i=0 ;i<ulQueue.children.length; i++) {
+  // ulQueue.children.forEach((child,index)=> {
+  const currentBoundingBox = ulQueue.children[i].getBoundingClientRect();
+if (currentBoundingBox.right < touchX ||
+  currentBoundingBox.left > touchX ||
+  currentBoundingBox.bottom < touchY ||
+  currentBoundingBox.top > touchY) {
+    droppedIndex = i;
+  }}
+  // })
+  if (droppedIndex >= 0) {
+    const letterElmIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(currentDrag.children[0].children[0].id.substring(currentDrag.children[0].children[0].id.lastIndexOf('_')+1,currentDrag.children[0].children[0].id.length)));
+    const currentLetterObj = lettersQueue.splice(letterElmIndx,1)[0];
+    // const droppedIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(ulQueue[droppedIndex].children[0].id.substring(ulQueue[droppedIndex].children[0].id.lastIndexOf('_')+1,ulQueue[droppedIndex].children[0].id.length)));
+    lettersQueue.splice(droppedIndex+1,0,currentLetterObj);
+    li.parentNode.insertBefore(currentDrag, li.nextSibling);
+  } else {
+    deleteBtn.click();
+  }
+})
 li.addEventListener('drop', e => {
     e.preventDefault();
     console.log(currentDrag);
@@ -844,34 +908,34 @@ li.addEventListener('drop', e => {
         
       }
   })
- li.addEventListener('drop', e => {
-    e.preventDefault();
-    console.log(currentDrag);
+//  li.addEventListener('drop', e => {
+//     e.preventDefault();
+//     console.log(currentDrag);
 
-      if (li != currentDrag) {
-        let currentpos = 0, droppedpos = 0;
-        for (let it=0; it<ulQueue.children.length; it++) {
-          if (currentDrag == ulQueue.children[it]) { 
-            currentpos = it; 
-          }
-          if (li == ulQueue.children[it]) { 
-            droppedpos = it; 
-          }
-        }
-        console.log(lettersQueue);
-        const letterElmIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(currentDrag.children[0].children[0].id.substring(currentDrag.children[0].children[0].id.lastIndexOf('_')+1,currentDrag.children[0].children[0].id.length)));
-        const currentLetterObj = lettersQueue.splice(letterElmIndx,1)[0];
-        const droppedIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(deleteBtn.id.substring(deleteBtn.id.lastIndexOf('_')+1,deleteBtn.id.length)));
-        lettersQueue.splice(droppedIndx+1,0,currentLetterObj);
-        console.log(lettersQueue);
-        if (currentpos < droppedpos) {
-          li.parentNode.insertBefore(currentDrag, li.nextSibling);
-        } else {
-          li.parentNode.insertBefore(currentDrag, li);
-        }
+//       if (li != currentDrag) {
+//         let currentpos = 0, droppedpos = 0;
+//         for (let it=0; it<ulQueue.children.length; it++) {
+//           if (currentDrag == ulQueue.children[it]) { 
+//             currentpos = it; 
+//           }
+//           if (li == ulQueue.children[it]) { 
+//             droppedpos = it; 
+//           }
+//         }
+//         console.log(lettersQueue);
+//         const letterElmIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(currentDrag.children[0].children[0].id.substring(currentDrag.children[0].children[0].id.lastIndexOf('_')+1,currentDrag.children[0].children[0].id.length)));
+//         const currentLetterObj = lettersQueue.splice(letterElmIndx,1)[0];
+//         const droppedIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(deleteBtn.id.substring(deleteBtn.id.lastIndexOf('_')+1,deleteBtn.id.length)));
+//         lettersQueue.splice(droppedIndx+1,0,currentLetterObj);
+//         console.log(lettersQueue);
+//         if (currentpos < droppedpos) {
+//           li.parentNode.insertBefore(currentDrag, li.nextSibling);
+//         } else {
+//           li.parentNode.insertBefore(currentDrag, li);
+//         }
         
-      }
-  }) 
+//       }
+//   }) 
   deleteBtn.addEventListener('click',()=>{
     li.remove();
     lettersQueue.splice(lettersQueue.map((letter)=>letter.id).indexOf(Number(deleteBtn.id.substring(deleteBtn.id.lastIndexOf('_')+1,deleteBtn.id.length))),1);

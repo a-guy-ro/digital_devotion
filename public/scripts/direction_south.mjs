@@ -164,7 +164,7 @@ function main () {
         imgDiv.draggable = true;
         // create an empty <span>
         let startDist = {x:0,y:0}; 
-                let d1 = 1;
+        let d1;
 // your DataTransfer code here--assume we put it in a variable called 'dt'
         let isEnlarging = false;
         imgDiv.addEventListener('mouseover', e => {
@@ -205,9 +205,9 @@ function main () {
                 e.preventDefault();
                 
                 d1 = dist(e);
-              } else if (e.touches.length > 2) { 
-            // firstTouch = true;
-            setTimeout(()=>firstTouch = false,500);
+              } else if (!firstTouch) { 
+            firstTouch = true;
+            setTimeout(()=>firstTouch = false,100);
             mouseMoveHandler(e);
             console.log(e);
             console.log(window.devicePixelRatio);
@@ -225,7 +225,7 @@ function main () {
             //     isEnlarging = false;
             // }
         } else {
-                // firstTouch = false;
+                firstTouch = false;
                 window.open(currentLink.href,"_blank");
             }
         });
@@ -257,7 +257,7 @@ function main () {
                 //get the ratio
             const rf = dist(e) / d1 * rs;
             imgDiv.style.transform = "scale(" + rf + ")";
-            } else if (e.touches.length>2) {
+            } else if (!firstTouch) {
             e.preventDefault();
             
             if (!isEnlarging) {
@@ -304,7 +304,7 @@ function main () {
             }
         });
         imgDiv.addEventListener('touchend', (e) => {
-            if (e.touches.length>1) {
+            if (!firstTouch) {
             e.preventDefault();
             // imgDiv.style.cursor = 'pointer';
             imgDiv.style.zIndex  = rnd(1,5,true);
