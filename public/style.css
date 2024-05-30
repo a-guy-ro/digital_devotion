@@ -163,7 +163,7 @@ max-height: 100%;
 }
 
 .south_img_btn_clicked, .south_img_btn_a :active {
-  color: white!important;
+  color: orange!important;
 }
 .south_img_btn_a{
   color:black!important
