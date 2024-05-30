@@ -84,13 +84,13 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
           gtlfLoader.load('./models/scarab_new.glb', (scarab)=> {
             dracpGtlfLoader.load('./models/drum_com_3.glb', (drum)=>{
               gtlfLoader.load('./models/staff_joined.glb', (staff)=>{
-                audioLoader.load('./audio/elemental/Saturn spiral fade out.mp3', (saturn) => {
-                  audioLoader.load('./audio/elemental/Fire crackles night.mp3', (firecrack) => {
-                    audioLoader.load('./audio/elemental/Waterfone Water gentle.mp3', (waterfone) => {
-                      audioLoader.load('./audio/elemental/Badagry water collect.mp3', (badagry) => {
-                        audioLoader.load('./audio/elemental/Seaweed Rattle.mp3', (seaweed) => {
-                          audioLoader.load('./audio/elemental/Wind Chiming.mp3', (wind) => {
-                            audioLoader.load('./audio/elemental/Pestle Mortar Egg Crush.mp3', (pestle) => {
+                // audioLoader.load('./audio/elemental/Saturn spiral fade out.mp3', (saturn) => {
+                  // audioLoader.load('./audio/elemental/Fire crackles at night.mp3', (firecrack) => {
+                  //   audioLoader.load('./audio/elemental/Waterfone Water gentle.mp3', (waterfone) => {
+                  //     audioLoader.load('./audio/elemental/Badagry water collect.mp3', (badagry) => {
+                  //       audioLoader.load('./audio/elemental/Seaweed Rattle.mp3', (seaweed) => {
+                  //         audioLoader.load('./audio/elemental/Wind Chiming.mp3', (wind) => {
+                  //           audioLoader.load('./audio/elemental/Pestle Mortar Egg Crush.mp3', (pestle) => {
                               
 
   loading_modal.style.display = 'none';
@@ -169,7 +169,7 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     object: disc.scene,
     locVec: new THREE.Vector3(9.5,15,-7.25),
     sound: 7,
-    elemental: saturn,
+    // elemental: saturn,
     posAudio: '',
     sound_title: 'letter_part_7',
     rotateZ: Math.PI,
@@ -184,7 +184,7 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     object: fools_gold.scene,
     locVec: new THREE.Vector3(-6.5, 15,-1),
     sound: 6,
-    elemental: wind,
+    // elemental: wind,
     posAudio: '',
     sound_title: 'letter_part_6',
     rotateZ: 0,
@@ -199,7 +199,7 @@ gtlfLoader.load('./models/eggshellscene_cone_external_joined.glb', (gltf)=> {
     object: mirror.scene,
     locVec: new THREE.Vector3(7,17,1),
     sound: 3,
-    elemental: seaweed,
+    // elemental: seaweed,
     posAudio: '',
     sound_title: 'letter_part_3',
     rotateZ: 0,
@@ -248,7 +248,7 @@ const flowersObject = {
   object: flowers.scene,
   locVec: new THREE.Vector3(1,27,6),
   sound: 1,
-  elemental: badagry,
+  // elemental: badagry,
   posAudio: '',
   sound_title: 'letter_part_1',
   rotateZ: 0,
@@ -266,11 +266,12 @@ const scarabObject = {
   object: scarab.scene,
   locVec: new THREE.Vector3(-10,23,-8),
   sound:5,
-  elemental: pestle,
+  // elemental: pestle,
   posAudio: '',
   sound_title: 'letter_part_5',
   rotateZ: Math.PI,
-  img: [{index: 4, timecode: '00:00', hasAppeared: false}],
+  img: [{index: 4, timecode: '00:00', hasAppeared: false},{index: 9, timecode: '00:22', hasAppeared: false}],
+  imgIndex: 0,
   elementalMenu: '00:00',
   scale: 2.2
 }
@@ -282,7 +283,7 @@ const drumObject = {
   object: drum.scene,
   locVec: new THREE.Vector3(-12,25,8),
   sound:2,
-  elemental: waterfone,
+  // elemental: waterfone,
   posAudio: '',
   sound_title: 'letter_part_2',
   rotateZ: 0,
@@ -298,7 +299,7 @@ const staffObject = {
   object: staff.scene,
   locVec: new THREE.Vector3(-1,16,-6),
   sound:4,
-  elemental: firecrack,
+  // elemental: firecrack,
   posAudio: '',
   sound_title: 'letter_part_4',
   rotateZ: Math.PI,
@@ -361,29 +362,29 @@ objects.forEach (object=> {
     object.object.rotateZ(object.rotateZ);
     object.object.position.copy(object.locVec);
     object.object.visible = false;
-    if (typeof object.elemental !== 'string') {
-      const currentElemental = new THREE.PositionalAudio( listener );
-      const posVolOffset = 1.2;
-      currentElemental.setBuffer(object.elemental);
-      currentElemental.setRefDistance(3);
-      if (object.name === 'disc') {
-        currentElemental.setVolume(0.05*posVolOffset);  
-        object.posAudioVol = 0.05*posVolOffset;
-      } else if (object.name === 'flowers') {
-        currentElemental.setVolume(0.1*posVolOffset);  
-        object.posAudioVol = 0.1*posVolOffset;
-      } else if (object.name === 'drum') {
-        currentElemental.setVolume(0.3*posVolOffset);  
-        object.posAudioVol = 0.3*posVolOffset;
-      } else {
-        currentElemental.setVolume(0.25*posVolOffset);
-        object.posAudioVol = 0.25*posVolOffset;
-      }
+    // if (typeof object.elemental !== 'string') {
+    //   const currentElemental = new THREE.PositionalAudio( listener );
+    //   const posVolOffset = 1.2;
+    //   currentElemental.setBuffer(object.elemental);
+    //   currentElemental.setRefDistance(3);
+    //   if (object.name === 'disc') {
+    //     currentElemental.setVolume(0.05*posVolOffset);  
+    //     object.posAudioVol = 0.05*posVolOffset;
+    //   } else if (object.name === 'flowers') {
+    //     currentElemental.setVolume(0.1*posVolOffset);  
+    //     object.posAudioVol = 0.1*posVolOffset;
+    //   } else if (object.name === 'drum') {
+    //     currentElemental.setVolume(0.3*posVolOffset);  
+    //     object.posAudioVol = 0.3*posVolOffset;
+    //   } else {
+    //     currentElemental.setVolume(0.25*posVolOffset);
+    //     object.posAudioVol = 0.25*posVolOffset;
+    //   }
       
 
-      object.posAudio = currentElemental;
-      object.object.add(object.posAudio);
-    }
+    //   object.posAudio = currentElemental;
+    //   object.object.add(object.posAudio);
+    // }
     
     scene.add(object.object);
 
@@ -520,18 +521,18 @@ requestAnimationFrame(animate);
 })
 })
 })
+// })
+// })
+// })
+// })
+// })
+// })
 })
 })
 })
 })
 })
-})
-})
-})
-})
-})
-})
-})
+// })
 // })
 });
 // console.log(skybox.material.opacity);
@@ -549,24 +550,24 @@ controls.enabled = false;
 const collapBtn = document.getElementById('music-player-colllapsible');
 collapBtn.addEventListener('click', ()=> onQueueClick(collapBtn))
 ulQueue = document.getElementById('player_queue_ul');
-{
-  letters.push({
-    title: 'letter_1',
-    sound: ''
-  })
-  letters.push({
-    title: 'letter_2',
-    sound: ''
-  })
-  letters.push({
-    title: 'letter_3',
-    sound: ''
-  })
-  letters.push({
-    title: 'letter_4',
-    sound: ''
-  })
-}
+// {
+//   letters.push({
+//     title: 'letter_1',
+//     sound: ''
+//   })
+//   letters.push({
+//     title: 'letter_2',
+//     sound: ''
+//   })
+//   letters.push({
+//     title: 'letter_3',
+//     sound: ''
+//   })
+//   letters.push({
+//     title: 'letter_4',
+//     sound: ''
+//   })
+// }
 trackNamePH = document.getElementById('player-track-name-p');
 trackNamePH.innerHTML = playingPH;
 trackQueuePH = document.getElementById('player_queue_ph');
@@ -729,7 +730,7 @@ function objectClickHandle(e) {
         id: trackCounter,
         img: object.img,
         elementalMenu: object.elementalMenu,
-        imgIndex: object.imgIndex
+        imgIndex: 0
         }
         trackNamePH.innerHTML = nowPlaying.title.replace(/_/g,' ');
         if (!firstPlay) {
@@ -747,7 +748,7 @@ function objectClickHandle(e) {
         id: trackCounter,
         img: object.img,
         elementalMenu: object.elementalMenu,
-        imgIndex: object.imgIndex
+        imgIndex: 0
       })
     }
       if (lettersQueue.length > 0) { 
@@ -998,7 +999,7 @@ console.log(collapMenu)
 
 for (let i=1; i<=letter_num; i++) {
   const currentAudioElement = document.createElement('audio');
-  currentAudioElement.src = './audio/letters/Maud Letter part ' + i +'.mp3';
+  currentAudioElement.src = './audio/letters/Letter to Maud part ' + i +'.mp3';
   currentAudioElement.preload = 'auto';
   currentAudioElement.id = 'audio_letter_'+i;
   currentAudioElement.classList.add('audio_letter');
@@ -1197,6 +1198,7 @@ for (let i=0;i<elementalItems.length;i++) {
       // nowPlaying.img[imgIndex].hasAppeared = false;
       nowPlaying.imgIndex = 1;
       currentIndex = nowPlaying.img[nowPlaying.imgIndex].index-1;
+      console.log(imgs[currentIndex]);
       imgs[currentIndex].classList.add('letters_images_container_show');
       imgs[currentIndex].classList.remove('letters_images_container_hide');
       nowPlaying.img[nowPlaying.imgIndex].hasAppeared = true;

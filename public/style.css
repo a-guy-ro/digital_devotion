@@ -814,6 +814,10 @@ div {
     max-width:25%;
     max-height: 75%;
   }
+  #letters_images_container-9{
+    left:22.5%;
+    max-width: 60%!important;
+  }
   .letters_images_container_show {
     display: block !important;
     opacity: 95%;
