@@ -2,10 +2,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js'
-import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
+// import {MTLLoader} from 'three/addons/loaders/MTLLoader.js';
 import { Reflector } from 'three/addons/objects/Reflector.js';
 // import { gsap } from "gsap";
-import { MeshToonMaterial } from 'three';
+// import { MeshToonMaterial } from 'three';
+// import { clone } from '@tensorflow/tfjs';
 
 
 
@@ -853,32 +854,58 @@ li.addEventListener('dragend', e => e.preventDefault());
   
 li.ondragover = e => e.preventDefault();
 li.ondragenter = e => e.preventDefault();
+// li.ontouchmove = e => {
+//     // on touch move or dragging, we get the newly created image element
+//     let cloneLi = li.cloneNode();
+//     ulQueue.parentNode.append(cloneLi);
+//     cloneLi.classList.add('cloned-li-float');
+//     // this will give us the dragging feeling of the element while actually it's a different element
+//     let left = e.touches[0].pageX;
+//     let top = e.touches[0].pageY;
+//     li.style.position = 'absolute'
+//     // li.style.display = 'block'
+//     li.style.left = left + 'px';
+//     li.style.top = top + 'px';
+//     li.style.zIndex = 10;
+
+//     // let touchX = e.touches[0].pageX
+//     // let touchY = e.touches[0].pageY
+//     //apply touch enter fucntion inside touch move
+//     // dragTouchenter(e,touchX,touchY)
+//     // }
+// }
 li.addEventListener('touchend', e => {
-  console.log(e.touches);
-  const touchX = e.touches[0].pageX;
-  const touchY = e.touches[0].pageY;
+  console.log(e);
+  // document.querySelector(".cloned-li-float").remove();
+  const touchX = e.changedTouches[0].pageX;
+  const touchY = e.changedTouches[0].pageY;
   e.preventDefault();
   let droppedIndex = -1;
   console.log(ulQueue.children.length);
   for (let i=0 ;i<ulQueue.children.length; i++) {
   // ulQueue.children.forEach((child,index)=> {
   const currentBoundingBox = ulQueue.children[i].getBoundingClientRect();
-if (currentBoundingBox.right < touchX ||
+if (!(currentBoundingBox.right < touchX ||
   currentBoundingBox.left > touchX ||
   currentBoundingBox.bottom < touchY ||
-  currentBoundingBox.top > touchY) {
+  currentBoundingBox.top > touchY)) {
     droppedIndex = i;
+    console.log(droppedIndex);
   }}
   // })
   if (droppedIndex >= 0) {
-    const letterElmIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(currentDrag.children[0].children[0].id.substring(currentDrag.children[0].children[0].id.lastIndexOf('_')+1,currentDrag.children[0].children[0].id.length)));
+    const letterElmIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(li.children[0].children[0].id.substring(li.children[0].children[0].id.lastIndexOf('_')+1,li.children[0].children[0].id.length)));
     const currentLetterObj = lettersQueue.splice(letterElmIndx,1)[0];
     // const droppedIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(ulQueue[droppedIndex].children[0].id.substring(ulQueue[droppedIndex].children[0].id.lastIndexOf('_')+1,ulQueue[droppedIndex].children[0].id.length)));
     lettersQueue.splice(droppedIndex+1,0,currentLetterObj);
-    li.parentNode.insertBefore(currentDrag, li.nextSibling);
+    ulQueue.insertBefore(li, ulQueue.children[droppedIndex]);
+    // li.style.position = 'initial';
+    console.log(lettersQueue);
+    console.log(li.parentNode);
   } else {
     deleteBtn.click();
   }
+  droppedIndex = -1;
 })
 li.addEventListener('drop', e => {
     e.preventDefault();
@@ -1227,6 +1254,7 @@ for (let i=0;i<elementalItems.length;i++) {
       // }
     } else if (playButton.dataset.playing === "true") {
       context.suspend();
+      audios[nowPlaying.sound-1].audio.pause();
       // playElemental();
       elementalItems.forEach(item=>item.children[0].children[0].pause());
       playButton.dataset.playing = "false";
