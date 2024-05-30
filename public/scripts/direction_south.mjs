@@ -3,6 +3,8 @@
 let links, images =[], movesCount = 0, moveThresh = 10;
 let mouseMove = {x:0, y:0};
 let lastMousePoses = [];
+let doubleTap = false;
+let touchType = 'mouse';
 // let dist = {x:0,y:0};
 const imgUrls = [
 {title:'Contemporaryand Instagram.png', id:'a'}, 
@@ -99,14 +101,29 @@ main();
 
 function main () {
     // console.log(files);
+    window.addEventListener('touchstart',()=> touchType = 'touch');
     const linksList = document.querySelector('#south_list');
     const framesContainer = document.querySelector('.frames_container');
+    const vids = document.querySelectorAll('#player');
+    vids.forEach(vid=>{
+        vid.addEventListener('dragover',e=>e.preventDefault());
+        vid.addEventListener('dragenter',e=>e.preventDefault());
+        vid.addEventListener('dragleave',e=>e.preventDefault());
+        vid.addEventListener('mouseover',e=>e.preventDefault());
+        vid.addEventListener('mouseenter',e=>e.preventDefault());
+    });
+    // vids.forEach(vid=>vid.addEventListener('dragenter',e=>e.preventDefault()));
+    // vids.forEach(vid=>vid.addEventListener('dragover',e=>e.preventDefault()));
+    linksList.addEventListener('dragover',e=>e.preventDefault());
+    linksList.addEventListener('dragenter',e=>e.preventDefault());
+    linksList.addEventListener('dragleave',e=>e.preventDefault());
     // fetch('../images/screenshots/imgs_links_sheet.json')
     // .then((response) => response.json())
     // .then((json) => {
         // const json = JSON.parse(imgs_links_sheet);
         json.forEach((file,indx)=>{
             if (file.image !== '') {
+        let firstTouch = false;
         const currentLi = document.createElement('li');
         currentLi.classList.add('list_itme');
         currentLi.id = 'list_item_' + indx;
@@ -146,6 +163,7 @@ function main () {
 // your DataTransfer code here--assume we put it in a variable called 'dt'
         let isEnlarging = false;
         imgDiv.addEventListener('mouseover', e => {
+            firstTouch = true;
             let dist = {x:0,y:0}
             mouseMoveHandler(e);
             currentDist(imgDiv, dist);
@@ -158,6 +176,7 @@ function main () {
             }
             
         });
+        imgDiv.addEventListener('mouseleave', ()=> firstTouch = false);
         imgDiv.addEventListener('dragstart', e => {    
             mouseMoveHandler(e);
             console.log(e);
@@ -176,6 +195,30 @@ function main () {
                 isEnlarging = false;
             }
         });
+        imgDiv.addEventListener('touchstart', e => {   
+            if (!firstTouch) { 
+            firstTouch = true;
+            setTimeout(()=>firstTouch = false,500);
+            mouseMoveHandler(e);
+            console.log(e);
+            console.log(window.devicePixelRatio);
+            currentDist(imgDiv,startDist);
+            console.log('ontouchstart!');
+            // e.dataTransfer.effectAllowed = "move";
+            
+            // const dt = e.dataTransfer;
+            // dt.setDragImage(cloned, 0, 0);
+            imgDiv.style.zIndex = 6;
+            if ((startDist.x > img.width*0.95 && startDist.y > img.height *0.95)||(startDist.x > img.width*0.95 && startDist.y<img.height*0.05)) {
+                isEnlarging = true
+                
+            } else {
+                isEnlarging = false;
+            }} else {
+                firstTouch = false;
+                window.open(currentLink.href,"_blank");
+            }
+        });
         imgDiv.addEventListener('drag', (e) => {
             e.preventDefault();
             
@@ -191,6 +234,29 @@ function main () {
             
             const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
             const currentWidth =  e.clientX - currentLeft;
+            if (currentWidth>0) {
+            imgDiv.width = currentWidth;
+            img.width = currentWidth;
+        }
+            // window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+
+        }
+        });
+        imgDiv.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            
+            if (!isEnlarging) {
+            imgDiv.style.cursor = 'drag';
+            const currentLeft = ((e.touches[0].pageX-startDist.x)/window.innerWidth)*100;            
+            const currentTop = ((e.touches[0].pageY-startDist.y)/window.innerHeight)*100;
+            imgDiv.style.left = currentLeft + '%';
+            imgDiv.style.top = currentTop + '%';
+            // console.log(imgDiv.style);
+            // console.log(e.clientX);
+        } else {
+            
+            const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+            const currentWidth =  e.touches[0].pageX - currentLeft;
             if (currentWidth>0) {
             imgDiv.width = currentWidth;
             img.width = currentWidth;
@@ -221,10 +287,39 @@ function main () {
     
             }
         });
+        imgDiv.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            // imgDiv.style.cursor = 'pointer';
+            imgDiv.style.zIndex  = rnd(1,5,true);
+            const lastLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+            if (!isEnlarging) {
+                if (e.touches[0].pageX < lastLeft + 50)
+                {const currentLeft = ((e.touches[0].pageX-startDist.x)/window.innerWidth)*100;            
+                const currentTop = ((e.touches[0].pageY-startDist.y)/window.innerHeight)*100;
+                imgDiv.style.left = currentLeft + '%';
+                imgDiv.style.top = currentTop + '%';
+                console.log(e);}
+            } else {
+                if (e.clientX < lastLeft + 50){
+                const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+                const currentWidth =  e.touches[0].pageX - currentLeft;
+                imgDiv.width = currentWidth;
+                img.width = currentWidth;}
+                // window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+    
+            }
+        });
           
         imgDiv.addEventListener('dragover',  e => e.preventDefault());
         imgDiv.addEventListener('dragenter', e => e.preventDefault());
         currentLink.appendChild(imgDiv);
+        // if (touchType === 'touch') {
+        // currentLink.addEventListener('touchstart', ()=> {
+        //     // webkitURL.pr
+        //     if (firstTouch) {
+        //         window.open(currentLink.href,"_blank");
+        //     }
+        // });}
         currentBtn.addEventListener('click', (e)=>onLinkHover(e, imgDiv, currentBtn));
     } else {
         const currentLi = document.createElement('li');
@@ -431,6 +526,6 @@ dist.y = mouseMove.y - currentTop;
 console.log(dist);
 }
 function mouseMoveHandler (e) {
-    mouseMove.x = e.clientX;
-    mouseMove.y = e.clientY;
+    mouseMove.x = e.clientX || e.touches[0].pageX;
+    mouseMove.y = e.clientY || e.touches[0].pageY;
 }
