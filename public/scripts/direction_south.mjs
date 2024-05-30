@@ -3,6 +3,7 @@
 let links, images =[], movesCount = 0, moveThresh = 10;
 let mouseMove = {x:0, y:0};
 let lastMousePoses = [];
+let rs = 1;
 let doubleTap = false;
 let touchType = 'mouse';
 // let dist = {x:0,y:0};
@@ -105,6 +106,10 @@ function main () {
     const linksList = document.querySelector('#south_list');
     const framesContainer = document.querySelector('.frames_container');
     const vids = document.querySelectorAll('#player');
+    if (window) {
+        rs = window.devicePixelRatio;
+    }
+    
     vids.forEach(vid=>{
         vid.addEventListener('dragover',e=>e.preventDefault());
         vid.addEventListener('dragenter',e=>e.preventDefault());
@@ -196,8 +201,12 @@ function main () {
             }
         });
         imgDiv.addEventListener('touchstart', e => {   
-            if (!firstTouch) { 
-            firstTouch = true;
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                
+                d1 = dist(e);
+              } else if (e.touches.length > 2) { 
+            // firstTouch = true;
             setTimeout(()=>firstTouch = false,500);
             mouseMoveHandler(e);
             console.log(e);
@@ -209,13 +218,14 @@ function main () {
             // const dt = e.dataTransfer;
             // dt.setDragImage(cloned, 0, 0);
             imgDiv.style.zIndex = 6;
-            if ((startDist.x > img.width*0.95 && startDist.y > img.height *0.95)||(startDist.x > img.width*0.95 && startDist.y<img.height*0.05)) {
-                isEnlarging = true
+            // if ((startDist.x > img.width*0.95 && startDist.y > img.height *0.95)||(startDist.x > img.width*0.95 && startDist.y<img.height*0.05)) {
+            //     isEnlarging = true
                 
-            } else {
-                isEnlarging = false;
-            }} else {
-                firstTouch = false;
+            // } else {
+            //     isEnlarging = false;
+            // }
+        } else {
+                // firstTouch = false;
                 window.open(currentLink.href,"_blank");
             }
         });
@@ -243,6 +253,11 @@ function main () {
         }
         });
         imgDiv.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                //get the ratio
+            rf = dist(e) / d1 * rs;
+            imgDiv.style.transform = "scale(" + rf + ")";
+            } else if (e.touches.length>2) {
             e.preventDefault();
             
             if (!isEnlarging) {
@@ -255,15 +270,15 @@ function main () {
             // console.log(e.clientX);
         } else {
             
-            const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
-            const currentWidth =  e.touches[0].pageX - currentLeft;
-            if (currentWidth>0) {
-            imgDiv.width = currentWidth;
-            img.width = currentWidth;
-        }
+        //     // const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+        //     // const currentWidth =  e.touches[0].pageX - currentLeft;
+        //     // if (currentWidth>0) {
+        //     // imgDiv.width = currentWidth;
+        //     // img.width = currentWidth;
+        // }
             // window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
 
-        }
+        }}
         });
         imgDiv.addEventListener('dragend', (e) => {
             e.preventDefault();
@@ -277,7 +292,8 @@ function main () {
                 imgDiv.style.left = currentLeft + '%';
                 imgDiv.style.top = currentTop + '%';
                 console.log(e);}
-            } else {
+            } 
+            else {
                 if (e.clientX < lastLeft + 50){
                 const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
                 const currentWidth =  e.clientX - currentLeft;
@@ -288,6 +304,7 @@ function main () {
             }
         });
         imgDiv.addEventListener('touchend', (e) => {
+            if (e.touches.length>1) {
             e.preventDefault();
             // imgDiv.style.cursor = 'pointer';
             imgDiv.style.zIndex  = rnd(1,5,true);
@@ -299,15 +316,17 @@ function main () {
                 imgDiv.style.left = currentLeft + '%';
                 imgDiv.style.top = currentTop + '%';
                 console.log(e);}
-            } else {
-                if (e.clientX < lastLeft + 50){
-                const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
-                const currentWidth =  e.touches[0].pageX - currentLeft;
-                imgDiv.width = currentWidth;
-                img.width = currentWidth;}
-                // window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+            } 
+            // else {
+            //     if (e.clientX < lastLeft + 50){
+            //     const currentLeft = window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
+            //     const currentWidth =  e.touches[0].pageX - currentLeft;
+            //     imgDiv.width = currentWidth;
+            //     img.width = currentWidth;}
+            //     // window.innerWidth*(Number(imgDiv.style.left.slice(0,imgDiv.style.left.indexOf('%')))/100);
     
-            }
+            // }
+        }
         });
           
         imgDiv.addEventListener('dragover',  e => e.preventDefault());
@@ -337,6 +356,11 @@ function main () {
 
     }
         })
+     
+        function dist(a) {
+            let zw = a.touches[0].pageX - a.touches[1].pageX, zh = a.touches[0].pageY - a.touches[1].pageY;
+            return Math.sqrt(zw * zw + zh * zh);
+          }
         // console.log(json)
     // });
 //     links = document.querySelectorAll('a');

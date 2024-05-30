@@ -811,11 +811,12 @@ function queueLiCreator (trackId) {
     currentDrag = li;
   console.log(currentDrag);
 });
-  li.addEventListener('dragend', e => e.preventDefault());
+// li.addEventListener('touchstart', ()=> currentDrag = li);
+li.addEventListener('dragend', e => e.preventDefault());
   
-  li.ondragover = e => e.preventDefault();
-  li.ondragenter = e => e.preventDefault();
-  li.addEventListener('drop', e => {
+li.ondragover = e => e.preventDefault();
+li.ondragenter = e => e.preventDefault();
+li.addEventListener('drop', e => {
     e.preventDefault();
     console.log(currentDrag);
 
@@ -843,7 +844,34 @@ function queueLiCreator (trackId) {
         
       }
   })
-  
+ li.addEventListener('drop', e => {
+    e.preventDefault();
+    console.log(currentDrag);
+
+      if (li != currentDrag) {
+        let currentpos = 0, droppedpos = 0;
+        for (let it=0; it<ulQueue.children.length; it++) {
+          if (currentDrag == ulQueue.children[it]) { 
+            currentpos = it; 
+          }
+          if (li == ulQueue.children[it]) { 
+            droppedpos = it; 
+          }
+        }
+        console.log(lettersQueue);
+        const letterElmIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(currentDrag.children[0].children[0].id.substring(currentDrag.children[0].children[0].id.lastIndexOf('_')+1,currentDrag.children[0].children[0].id.length)));
+        const currentLetterObj = lettersQueue.splice(letterElmIndx,1)[0];
+        const droppedIndx = lettersQueue.map(letter=>letter.id).indexOf(Number(deleteBtn.id.substring(deleteBtn.id.lastIndexOf('_')+1,deleteBtn.id.length)));
+        lettersQueue.splice(droppedIndx+1,0,currentLetterObj);
+        console.log(lettersQueue);
+        if (currentpos < droppedpos) {
+          li.parentNode.insertBefore(currentDrag, li.nextSibling);
+        } else {
+          li.parentNode.insertBefore(currentDrag, li);
+        }
+        
+      }
+  }) 
   deleteBtn.addEventListener('click',()=>{
     li.remove();
     lettersQueue.splice(lettersQueue.map((letter)=>letter.id).indexOf(Number(deleteBtn.id.substring(deleteBtn.id.lastIndexOf('_')+1,deleteBtn.id.length))),1);
