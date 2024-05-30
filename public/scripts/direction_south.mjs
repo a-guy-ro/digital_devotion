@@ -255,7 +255,7 @@ function main () {
         imgDiv.addEventListener('touchmove', (e) => {
             if (e.touches.length === 2) {
                 //get the ratio
-            rf = dist(e) / d1 * rs;
+            const rf = dist(e) / d1 * rs;
             imgDiv.style.transform = "scale(" + rf + ")";
             } else if (e.touches.length>2) {
             e.preventDefault();
