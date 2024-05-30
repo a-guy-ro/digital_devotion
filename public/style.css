@@ -890,3 +890,30 @@ div {
     font-family: 'DotGothic16';
 
   }
+
+  @media screen and (max-device-width: 480px)  {
+    #south_text_container_title, .back_home, p, a, button {
+        font-size: 20px!important;
+      }
+      h1{
+        font-size: 50px;
+      }
+      .back_home {
+        bottom: 2.5%;
+        border: none!important;
+      }
+    }
+    @media screen and (max-device-width: 480px)
+    and (orientation: portrait) {
+      .embed-vid{
+        margin-top: 17.5vh;
+        margin-left: 5vh;    
+      }
+    }
+    @media screen and (max-device-width: 1024px) {
+      .player-queue-container {
+        width: 40%;
+      }
+      body { -webkit-touch-callout: none !important; }
+      a { -webkit-user-select: none !important; }
+    }

@@ -994,49 +994,69 @@ const collapMenu = document.querySelectorAll('.adding-sounds-collapsible');
 const openMenuDiv = document.querySelector('.adding-sounds-options-container');
 const elementalItems = document.querySelectorAll('.adding-sounds-item');
 const elementalOffset = 0.6;
+const context = new AudioContext();
+// const gainNode = context.createGain();
+
 let hasPlayed = false;
 console.log(collapMenu)
 
 for (let i=1; i<=letter_num; i++) {
   const currentAudioElement = document.createElement('audio');
-  currentAudioElement.src = './audio/letters/Letter to Maud part ' + i +'.mp3';
+  const currentURL = './audio/letters/Letter to Maud part ' + i +'.mp3';
+  currentAudioElement.src = currentURL;
   currentAudioElement.preload = 'auto';
   currentAudioElement.id = 'audio_letter_'+i;
   currentAudioElement.classList.add('audio_letter');
+  // let currentAudioBuffer; 
+  // loadBuffer(currentURL, currentAudioBuffer);
+  // const currentSource = context.createBufferSource();
+  // currentSource.buffer = currentAudioBuffer;
+  // currentSource.connect(context.destination);
   
+
   
   currentAudioElement.addEventListener("ended", () => onEndedHandler());
   currentAudioElement.addEventListener("timeupdate", () => {
     progressUpdate();
     setTimes();
   });
-  const currentAudioCtx = new AudioContext();
-  const gainNode = currentAudioCtx.createGain()
-  const currentTrack = currentAudioCtx.createMediaElementSource(currentAudioElement);
-  currentTrack.connect(gainNode).connect(currentAudioCtx.destination);
+  // const currentAudioCtx = new AudioContext();
+  
+  const currentTrack = context.createMediaElementSource(currentAudioElement);
+  const currentGainNode = context.createGain();
+  // currentTrack.connect(currentGainNode);
+  // currentGainNode.connect(context.destination);
+
+  // currentTrack.connect(gainNode).connect(context);
 
   audios.push({
     audio: currentAudioElement,
-    ctx: currentAudioCtx,
+    // ctx: currentAudioCtx,
     track: currentTrack,
-    gain: gainNode
+    gain: currentGainNode
 });
   // tracks.push(currentTrack);
   // console.log(audios);
 }
-
+// console.log(context);
 for (let i=0;i<elementalItems.length;i++) {
-  const currentAudioCtx = new AudioContext();
-  const currentTrack = currentAudioCtx.createMediaElementSource(elementalItems[i].children[0].children[0]);
+  // const currentAudioCtx = new AudioContext();
+  const currentAudio = elementalItems[i].children[0].children[0];
+  const currentTrack = context.createMediaElementSource(currentAudio);
   elementalItems[i].track = currentTrack;
-  elementalItems[i].gain = currentAudioCtx.createGain();
-  elementalItems[i].track.connect(elementalItems[i].gain).connect(currentAudioCtx.destination);
+  elementalItems[i].gain = context.createGain();
+  // elementalItems[i].track.connect(elementalItems[i].gain).connect(context.destination);
   elementalItems[i].children[0].addEventListener('click', ()=> {
-    currentAudioCtx.resume();
+    elementalItems[i].track.connect(elementalItems[i].gain).connect(context.destination);
+    
+    // elementalItems[i].audio.play();
     elementalItems[i].gain.gain.value = volumeControl.value * elementalOffset;
-    elementalItems[i].children[0].children[0].play();
-    console.log(elementalItems[i].gain.gain.value);
-  })}
+    currentAudio.play();
+    // elementalItems[i].children[0].children[0].play();
+    // console.log(elementalItems[i].gain.gain.value);
+  })
+  currentAudio.addEventListener('ended', ()=> elementalItems[i].gain.disconnect());
+}
 
   collapMenu.forEach(btn=> {
     // btn.style.display = 'none';
@@ -1069,20 +1089,22 @@ for (let i=0;i<elementalItems.length;i++) {
     // By default, browsers won't allow you to autoplay audio. 
     // You can override by finding the AudioContext state and resuming it after a user interaction like a "click" event. 
     if (typeof nowPlaying !== 'undefined') {
-    if (audios[nowPlaying.sound-1].ctx.state === "suspended") {
-      audios[nowPlaying.sound-1].ctx.resume()
+    if (context.state === "suspended") {
+      context.resume()
       // stopElemental();
     }
     // Play or pause track depending on state 
     if (playButton.dataset.playing === "false") {
       setTimes();
       audios[nowPlaying.sound-1].gain.gain.value = volumeControl.value
+      audios[nowPlaying.sound-1].track.connect(audios[nowPlaying.sound-1].gain).connect(context.destination);
       // if (n === '') {
         //  
       // }
       // track = audioCtx.createMediaElementSource(audios[nowPlaying.sound-1]);
       // stopElemental();
       audios[nowPlaying.sound-1].audio.play();
+      // context.play();
       
       console.log('playing ' + audios[nowPlaying.sound-1].audio.src);
       playButton.dataset.playing = "true";
@@ -1111,7 +1133,7 @@ for (let i=0;i<elementalItems.length;i++) {
       //   soundsMenu.classList.remove('letters_images_container_hide');
       // }
     } else if (playButton.dataset.playing === "true") {
-      audios[nowPlaying.sound-1].audio.pause();
+      context.suspend();
       // playElemental();
       elementalItems.forEach(item=>item.children[0].children[0].pause());
       playButton.dataset.playing = "false";
@@ -1221,6 +1243,7 @@ for (let i=0;i<elementalItems.length;i++) {
     progressFilled.style.flexBasis = "0%"
     audios[nowPlaying.sound-1].currentTime = 0;
     hasPlayed = false;
+    audios[nowPlaying.sound-1].gain.disconnect();
     nowPlaying.img.forEach(img=> {
       img.hasAppeared = false;
       imgs[img.index-1].classList.remove('letters_images_container_show');
@@ -1251,6 +1274,7 @@ for (let i=0;i<elementalItems.length;i++) {
         pauseIcon.classList.remove("hidden");
         playIcon.classList.add("hidden");
       }
+      audios[nowPlaying.sound-1].track.connect(audios[nowPlaying.sound-1].gain).connect(context.destination);
       audios[nowPlaying.sound-1].audio.play();
       // if (nowPlaying.img.length === 1){ 
       //   if(nowPlaying.img[0].hasAppeared || nowPlaying.img[0].timecode === '00:00') {
@@ -1285,12 +1309,13 @@ for (let i=0;i<elementalItems.length;i++) {
         ulQueue.style.display = 'none';
       }
     } else {
+      // context.suspend();
       console.log('no more tracks queued!');
       firstPlay = false;
       playerCurrentTime.innerHTML = '00:00';
       playerDuration.innerHTML = '00:00';
       nowPlaying = undefined;
-      console.log(typeof nowPlaying);
+      // console.log(typeof nowPlaying);
       trackNamePH.innerHTML = playingPH;
       playButton.dataset.playing = "false"
       pauseIcon.classList.add("hidden")
@@ -1302,53 +1327,67 @@ for (let i=0;i<elementalItems.length;i++) {
   progress.addEventListener("mousemove", (e) => mousedown && scrub(e))
   progress.addEventListener("mousedown", () => (mousedown = true))
   progress.addEventListener("mouseup", () => (mousedown = false))
+
+  // function loadBuffer (url, currentBuffer) {
+  //   let request = new XMLHttpRequest();
+  //   request.open('GET', url, true);
+  //   request.responseType = 'arraybuffer';
+
+  //   // Decode asynchronously
+  //   request.onload = function() {
+  //   context.decodeAudioData(request.response, function(buffer) {
+  //       currentBuffer = buffer;
+  //   }, onError);
+  //   }
+  //   request.send();
+  // }
 // })
-function stopElemental () {
-  // objects.forEach(obj=>
-  //   {
-  //     if (typeof obj.posAudio !== 'string') {
-  //       // if (!obj.posAudio.isPlaying) {
-  //       fadeVol(obj.posAudioVol*volumeControl.value,0,0.01,obj.posAudio);
-  //       // obj.posAudio.stop();
+// function stopElemental () {
+//   // objects.forEach(obj=>
+//   //   {
+//   //     if (typeof obj.posAudio !== 'string') {
+//   //       // if (!obj.posAudio.isPlaying) {
+//   //       fadeVol(obj.posAudioVol*volumeControl.value,0,0.01,obj.posAudio);
+//   //       // obj.posAudio.stop();
         
-  //     // }
-  //   }
-  // }
-  // )
-}
-function playElemental () {
-  // objects.forEach(obj=>
-  //   {
-  //     if (typeof obj.posAudio !== 'string') {
-  //       // if (!obj.posAudio.isPlaying) {
-  //       obj.posAudio.setLoop(true);
-  //       obj.posAudio.play();
-  //       fadeVol(0,obj.posAudioVol*volumeControl.value,0.01,obj.posAudio);
-  //     // }
-  //   }
-  // }
-  // )
-}
+//   //     // }
+//   //   }
+//   // }
+//   // )
+// }
+// function playElemental () {
+//   // objects.forEach(obj=>
+//   //   {
+//   //     if (typeof obj.posAudio !== 'string') {
+//   //       // if (!obj.posAudio.isPlaying) {
+//   //       obj.posAudio.setLoop(true);
+//   //       obj.posAudio.play();
+//   //       fadeVol(0,obj.posAudioVol*volumeControl.value,0.01,obj.posAudio);
+//   //     // }
+//   //   }
+//   // }
+//   // )
+// }
 
-function fadeVol (vol, end, interval, soundElement) {
-//   // if (end > vol) {}
-//   if (Math.abs(end-vol) > interval) {
-//     if (end > vol) {
-//       vol += interval;
-//     } else {
-//       vol -= interval;
-//     }
-//       soundElement.setVolume(vol);
-//       // console.log(soundElement.getVolume());
-//       setTimeout(()=>fadeVol (vol,end,interval, soundElement),1);
+// function fadeVol (vol, end, interval, soundElement) {
+// //   // if (end > vol) {}
+// //   if (Math.abs(end-vol) > interval) {
+// //     if (end > vol) {
+// //       vol += interval;
+// //     } else {
+// //       vol -= interval;
+// //     }
+// //       soundElement.setVolume(vol);
+// //       // console.log(soundElement.getVolume());
+// //       setTimeout(()=>fadeVol (vol,end,interval, soundElement),1);
 
-//   } else {
-//       soundElement.setVolume(end);
-//       if (end === 0) {
-//         soundElement.stop();
-//       }
-//   }
+// //   } else {
+// //       soundElement.setVolume(end);
+// //       if (end === 0) {
+// //         soundElement.stop();
+// //       }
+// //   }
 
-}
+// }
 }
 
