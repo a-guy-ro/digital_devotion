@@ -917,3 +917,10 @@ div {
       body { -webkit-touch-callout: none !important; }
       a { -webkit-user-select: none !important; }
     }
+    @media screen and (max-device-width: 1024px)
+    and (min-device-width: 480px) {
+    .intro-modal {
+      top: 7.5vh;
+      width: 40%;
+    }
+}

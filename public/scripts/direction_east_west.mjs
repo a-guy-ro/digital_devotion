@@ -627,6 +627,7 @@ canvas.addEventListener('touchstart', (e)=> {
 canvas.addEventListener('click', e=> objectClickHandle(e))
 window.addEventListener ('resize',onWindowResize);
 window.addEventListener( 'pointermove', onPointerMove );
+// document.querySelector("body").longclick(250, (e)=>   e.preventDefault());
 
   
 }
