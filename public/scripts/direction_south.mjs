@@ -164,7 +164,7 @@ function main () {
         imgDiv.draggable = true;
         // create an empty <span>
         let startDist = {x:0,y:0}; 
-
+                let d1 = 1;
 // your DataTransfer code here--assume we put it in a variable called 'dt'
         let isEnlarging = false;
         imgDiv.addEventListener('mouseover', e => {
