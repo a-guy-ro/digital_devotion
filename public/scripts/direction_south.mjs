@@ -257,12 +257,14 @@ function main () {
         imgDiv.addEventListener('touchmove', (e) => {
             if (e.touches.length === 2) {
                 //get the ratio
-            if (!dragMove) {
-                const rf = 1;
-                dragMove = true;
-            } else {
+            // if (!dragMove) {
+            //     const rf = 1;
+            //     dragMove = true;
+            // } else {
                 const rf = dist(e) / d1 * rs;
-            }
+            // }
+            console.log(dist(e));
+            console.log(rf);
             // if (rf > 2) {
             //     rf = 1;
             // }
@@ -315,7 +317,7 @@ function main () {
             }
         });
         imgDiv.addEventListener('touchend', (e) => {
-            dragMove = false;
+            // dragMove = false;
             if (!firstTouch) {
             e.preventDefault();
             // imgDiv.style.cursor = 'pointer';
