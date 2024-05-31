@@ -106,9 +106,9 @@ function main () {
     const linksList = document.querySelector('#south_list');
     const framesContainer = document.querySelector('.frames_container');
     const vids = document.querySelectorAll('#player');
-    if (window) {
-        rs = window.devicePixelRatio;
-    }
+    // if (window) {
+    //     rs = window.devicePixelRatio;
+    // }
     
     vids.forEach(vid=>{
         vid.addEventListener('dragover',e=>e.preventDefault());
