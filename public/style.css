@@ -912,6 +912,9 @@ div {
         width: 36px!important;
         height: 36px!important;
       }
+      .direction_title {
+        font-size: 32px;
+      }
     }
     @media screen and (max-device-width: 480px)
     and (orientation: portrait) {
@@ -932,10 +935,18 @@ div {
       .player-queue-container {
         width: 40%;
       }
+      .player_queue_li{
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      
      
       .player-play-btn{
         margin-left:10%;
         margin-right:10%;
+      }
+      #controls_text_container, .back_home {
+        border: none!important;
       }
       /* .icon-next{
         width: 36px!important;
