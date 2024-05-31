@@ -915,6 +915,10 @@ div {
       .direction_title {
         font-size: 32px;
       }
+      .drag-icon-span svg {
+        width: 18px!important;
+        height: 18px!important;
+      }
     }
     @media screen and (max-device-width: 480px)
     and (orientation: portrait) {
@@ -947,6 +951,7 @@ div {
       }
       #controls_text_container, .back_home, #loading_title {
         border: none!important;
+        border-image-width: 0!important;
       }
       /* .icon-next{
         width: 36px!important;

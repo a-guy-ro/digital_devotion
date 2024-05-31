@@ -966,6 +966,7 @@ li.addEventListener('drop', e => {
         
 //       }
 //   }) 
+deleteBtn.addEventListener('touchstart', deleteBtn.click());
   deleteBtn.addEventListener('click',()=>{
     li.remove();
     lettersQueue.splice(lettersQueue.map((letter)=>letter.id).indexOf(Number(deleteBtn.id.substring(deleteBtn.id.lastIndexOf('_')+1,deleteBtn.id.length))),1);
