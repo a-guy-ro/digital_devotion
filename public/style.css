@@ -945,7 +945,7 @@ div {
         margin-left:10%;
         margin-right:10%;
       }
-      #controls_text_container, .back_home {
+      #controls_text_container, .back_home, #loading_title {
         border: none!important;
       }
       /* .icon-next{
@@ -964,9 +964,9 @@ div {
         /* max-height: 30%!important; */
       }
       .letter-image-sq{
-        left:32.5%;
-        max-width:35%;
-        max-height: 85%!important;
+        left:15%;
+        max-width:70%;
+        max-height: 90%!important;
       }
       .letter-image-ver{
         left:20%;

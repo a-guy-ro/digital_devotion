@@ -842,7 +842,8 @@ function queueLiCreator (trackId) {
   dragBtn.classList.add('player_queue_drag_button');
   dragBtn.classList.add('player_queue_item');
   dragBtn.id = 'player_queue_drag_button_' + trackCounter;
-  dragBtn.innerHTML = `<span class="player-icon-span" id="player-icon-span"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><title>queue</title><g><rect  class="icon-queue" x="2" y="4" rx="0.5" ry="0.5" width="15.48" height="2"/><rect class="icon-queue" x="2" y="10" rx="0.5" ry="0.5" width="15.48" height="2"/><rect class="icon-queue" x="2" y="16"  rx="0.5" ry="0.5" width="15.48" height="2"/></g><rect class="icon-container" width="24" height="24"/></svg></span>`;
+  dragBtn.innerHTML = `<span class="drag-icon-span" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>drag</title><g><rect  class="icon-queue" x="2" y="4" rx="1" ry="1" width="17.48" height="3"/><rect class="icon-queue" x="2" y="10" rx="1" ry="1" width="17.48" height="3"/><rect class="icon-queue" x="2" y="16"  rx="1" ry="1" width="17.48" height="3"/></g><rect class="icon-container" width="24" height="24"/></svg></span>`
+  // `<span class="player-icon-span" id="player-icon-span"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><title>queue</title><g><rect  class="icon-queue" x="2" y="4" rx="0.5" ry="0.5" width="15.48" height="2"/><rect class="icon-queue" x="2" y="10" rx="0.5" ry="0.5" width="15.48" height="2"/><rect class="icon-queue" x="2" y="16"  rx="0.5" ry="0.5" width="15.48" height="2"/></g><rect class="icon-container" width="24" height="24"/></svg></span>`;
   liDiv.append(dragBtn);
   console.log(liDiv.children);
   // liDiv.children.forEach(child=>child.classList.add('player_queue_element'));
@@ -1280,10 +1281,12 @@ for (let i=0;i<elementalItems.length;i++) {
 
   nextButton.addEventListener("click", ()=> {
     console.log('next!');
-    audios[nowPlaying.sound-1].audio.currentTime = audios[nowPlaying.sound-1].audio.duration-0.1;
+    audios[nowPlaying.sound-1].audio.currentTime = audios[nowPlaying.sound-1].audio.duration;
     // progressUpdate();
     // audios[nowPlaying.sound-1].audio.pause();
-    // onEndedHandler();
+    if (playButton.dataset.playing === 'false'){
+    onEndedHandler();
+  }
   });
 
   backButton.addEventListener("click",()=>{
@@ -1396,9 +1399,12 @@ for (let i=0;i<elementalItems.length;i++) {
         playButton.dataset.playing = "true";
         pauseIcon.classList.remove("hidden");
         playIcon.classList.add("hidden");
+        context.resume();
+        console.log(nowPlaying);
       }
       audios[nowPlaying.sound-1].track.connect(audios[nowPlaying.sound-1].gain).connect(context.destination);
       audios[nowPlaying.sound-1].audio.play();
+      console.log(audios[nowPlaying.sound-1].audio);
       // if (nowPlaying.img.length === 1){ 
       //   if(nowPlaying.img[0].hasAppeared || nowPlaying.img[0].timecode === '00:00') {
       //   nowPlaying.img[0].hasAppeared = true;
