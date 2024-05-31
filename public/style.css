@@ -518,6 +518,7 @@ div {
   .player_queue_section{
     display: flex;
     flex-flow: row wrap;
+    justify-content: space-between;
   }
   .player_queue_button {
     /* display: flexbox; */
@@ -918,6 +919,9 @@ div {
       .drag-icon-span svg {
         width: 18px!important;
         height: 18px!important;
+      } 
+      .player_queue_title_span{
+        flex: 55%!important;
       }
     }
     @media screen and (max-device-width: 480px)
