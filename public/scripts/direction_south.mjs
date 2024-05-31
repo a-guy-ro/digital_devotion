@@ -205,8 +205,9 @@ function main () {
             if (e.touches.length === 2) {
                 e.preventDefault();
                 
-                d1 = 1;
-                // dist(e);
+                d1 = dist(e);
+                // 1;
+                
               } else if (!firstTouch) { 
             firstTouch = true;
             setTimeout(()=>firstTouch = false,100);
